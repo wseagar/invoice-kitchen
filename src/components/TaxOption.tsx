@@ -1,8 +1,8 @@
-import { useAppStateStore } from "@/store";
-import { Checkbox } from "./ui/checkbox";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
+import { useAppStateStore } from '@/store';
+import { Checkbox } from './ui/checkbox';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
+import { Label } from './ui/label';
+import { Input } from './ui/input';
 
 export function TaxOption() {
   const { state, setState } = useAppStateStore();
@@ -25,7 +25,7 @@ export function TaxOption() {
           id="enableTax"
           checked={state.taxRate !== null}
           onCheckedChange={(checkedState) => {
-            setState("taxRate", checkedState ? 0.1 : null);
+            setState('taxRate', checkedState ? 0.1 : null);
           }}
         />
       </div>
@@ -48,7 +48,7 @@ export function TaxOption() {
             placeholder="0.1"
             id="taxRate"
             value={state.taxRate}
-            onChange={(e) => setState("taxRate", e.target.valueAsNumber)}
+            onChange={(e) => setState('taxRate', e.target.valueAsNumber)}
           />
         </div>
       )}

@@ -1,5 +1,5 @@
-import { useAppStateStore } from "@/store";
-import { Input } from "./ui/input";
+import { useAppStateStore } from '@/store';
+import { Input } from './ui/input';
 
 export function LogoSelector() {
   const { state, setState } = useAppStateStore();
@@ -8,7 +8,7 @@ export function LogoSelector() {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      setState("logo", reader.result as string);
+      setState('logo', reader.result as string);
     };
 
     if (!file) {

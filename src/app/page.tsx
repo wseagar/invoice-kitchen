@@ -1,4 +1,4 @@
-import InvoiceBuilder from "@/components/InvoiceBuilder";
+import InvoiceBuilder from '@/components/InvoiceBuilder';
 
 export default function Home() {
   return <InvoiceBuilder />;
