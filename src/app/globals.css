@@ -8,7 +8,6 @@
   margin: auto auto;
   padding: 20mm;
   background: white;
-  box-shadow: 0 0 5mm rgba(0, 0, 0, 0.1);
 }
 
 @layer base {
@@ -89,5 +88,8 @@
 @media print {
   #sidebar {
     display: none;
+  }
+  @page {
+    margin: 0;
   }
 }

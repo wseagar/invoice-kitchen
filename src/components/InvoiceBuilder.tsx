@@ -89,7 +89,7 @@ const MainContent: React.FC = () => {
   return (
     <div className="h-full w-full overflow-auto flex justify-center items-center bg-gray-100 pt-8 pb-8">
       <SidebarButton />
-      <div className="a4 m-8 text-black flex flex-col gap-8">
+      <div className="a4 shadow-lg print:shadow-none m-8 text-black flex flex-col gap-8">
         <Header />
         <div className="border-b border-gray-300" />
         <SubHeader />
@@ -103,7 +103,7 @@ const MainContent: React.FC = () => {
 const SidebarButton: React.FC = () => {
   const { state, setState } = useAppStateStore();
   return !state.sidebarOpen ? (
-    <div className="absolute top-2 left-2 ">
+    <div className="absolute top-2 left-2 print:hidden">
       <button
         className="p-4 flex items-center gap-2 hover:text-purple-700 "
         onClick={() => setState('sidebarOpen', true)}
