@@ -151,6 +151,7 @@ const Header: React.FC = () => {
       <div>
         {state.headerFields.map((headerField, index) => (
           <Input
+            key={index}
             className="font-normal text-sm"
             labelClassName="font-semibold text-sm uppercase tracking-wider"
             label={headerField.label}
