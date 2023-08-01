@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ChangeEvent } from "react";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { Cross1Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { Sidebar } from "./Sidebar";
 import { StoreContext, store, useAppStateStore } from "@/store";
 import { observer } from "mobx-react-lite";
@@ -235,14 +235,13 @@ const InvoiceItemsTable: React.FC = () => {
           className="relative border-b border-gray-300 grid grid-cols-8 py-2 group"
         >
           <button
-            className="absolute left-0 transform -translate-x-full group-hover:flex hidden w-8 h-8 items-center justify-center text-lg"
+            className="absolute left-0 transform -translate-x-full opacity-0 group-hover:opacity-100 flex w-8 h-8 items-center justify-center"
             onClick={() => {
-              const newLineItems = [...lineItems];
-              newLineItems.splice(index, 1);
-              setLineItems(newLineItems);
+              const nextLineItems = lineItems.filter((_, idx) => idx !== index);
+              setLineItems(nextLineItems);
             }}
           >
-            X
+            <Cross1Icon />
           </button>
           <div className="col-span-5">
             <Input
