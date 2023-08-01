@@ -1,16 +1,16 @@
-"use client";
-import { CurrencySelector } from "./CurrencySelector";
+'use client';
+import { CurrencySelector } from './CurrencySelector';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "./ui/accordion";
-import { Cross1Icon } from "@radix-ui/react-icons";
-import { cx } from "./InvoiceBuilder";
-import { useAppStateStore } from "@/store";
-import { TaxOption } from "./TaxOption";
-import { LogoSelector } from "./LogoSelector";
+} from './ui/accordion';
+import { Cross1Icon } from '@radix-ui/react-icons';
+import { cx } from './InvoiceBuilder';
+import { useAppStateStore } from '@/store';
+import { TaxOption } from './TaxOption';
+import { LogoSelector } from './LogoSelector';
 
 export function Sidebar() {
   const { setState, state } = useAppStateStore();
@@ -19,14 +19,14 @@ export function Sidebar() {
     <div
       className={cx(
         // todo: transition
-        "h-full min-w-[300px] bg-white text-black overflow-auto",
-        !state.sidebarOpen ? "hidden" : ""
+        'h-full min-w-[300px] bg-white text-black overflow-auto',
+        !state.sidebarOpen ? 'hidden' : '',
       )}
     >
       {/* Header */}
       <div className="flex justify-between items-center px-4 py-4 border-b border-gray-200">
         <span className="font-semibold text-md">Invoice Kitchen</span>
-        <button onClick={() => setState("sidebarOpen", false)}>
+        <button onClick={() => setState('sidebarOpen', false)}>
           <Cross1Icon className="w-5 h-5" />
         </button>
       </div>

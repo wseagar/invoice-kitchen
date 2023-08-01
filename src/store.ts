@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from 'mobx';
 
 type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<U[keyof U]>;
 type PartialPaths<T> = {
@@ -53,30 +53,30 @@ class AppStateStore {
       sidebarOpen: false,
       previewMode: false,
       currency: {
-        name: "United States Dollar",
-        value: "USD",
+        name: 'United States Dollar',
+        value: 'USD',
       },
       taxRate: null,
       logo: null,
 
-      businessName: "",
-      businessHeaderFreeText: "",
+      businessName: '',
+      businessHeaderFreeText: '',
       headerFields: [
         {
-          label: "INVOICE #",
-          value: "",
-          placeholder: "INV-0001",
+          label: 'INVOICE #',
+          value: '',
+          placeholder: 'INV-0001',
         },
         {
-          label: "DATE",
-          value: "",
-          placeholder: "01/01/2021",
+          label: 'DATE',
+          value: '',
+          placeholder: '01/01/2021',
         },
       ],
-      invoiceSubheader: "TAX INVOICE",
-      invoiceSubheaderFreeText: "",
-      notesLabel: "NOTES",
-      notesFreeText: "",
+      invoiceSubheader: 'TAX INVOICE',
+      invoiceSubheaderFreeText: '',
+      notesLabel: 'NOTES',
+      notesFreeText: '',
 
       lineItems: [],
     };
@@ -85,8 +85,8 @@ class AppStateStore {
   }
 
   formatAsCurrency = (value: number) => {
-    return Intl.NumberFormat("en-US", {
-      style: "currency",
+    return Intl.NumberFormat('en-US', {
+      style: 'currency',
       currency: this.state.currency.value,
     }).format(value);
   };

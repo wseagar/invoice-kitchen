@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { ChangeEvent } from "react";
-import { Cross1Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { Sidebar } from "./Sidebar";
-import { StoreContext, store, useAppStateStore } from "@/store";
-import { observer } from "mobx-react-lite";
+import React, { ChangeEvent } from 'react';
+import { Cross1Icon, HamburgerMenuIcon } from '@radix-ui/react-icons';
+import { Sidebar } from './Sidebar';
+import { StoreContext, store, useAppStateStore } from '@/store';
+import { observer } from 'mobx-react-lite';
 
 export function cx(...classes: (string | undefined)[]) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 }
 
 interface InputProps {
@@ -74,7 +74,7 @@ export default function InvoiceBuilderWrapper() {
 
 const InvoiceBuilder = observer(() => {
   const { state } = useAppStateStore();
-  console.log("state", state);
+  console.log('state', state);
 
   return (
     <div className="h-[100vh] flex">
@@ -105,7 +105,7 @@ const SidebarButton: React.FC = () => {
   return !state.sidebarOpen ? (
     <button
       className="absolute top-0 left-0 transform translate-x-full w-8 h-8 flex items-center justify-center"
-      onClick={() => setState("sidebarOpen", true)}
+      onClick={() => setState('sidebarOpen', true)}
     >
       <HamburgerMenuIcon />
     </button>
@@ -125,13 +125,13 @@ const Header: React.FC = () => {
           />
         </div>
       )}
-      <div className={state.logo ? "col-span-3" : "col-span-4"}>
+      <div className={state.logo ? 'col-span-3' : 'col-span-4'}>
         <Input
           className="font-semibold text-sm"
           placeholder="Business Name"
           value={state.businessName}
           onChange={(e) => {
-            setState("businessName", e.target.value);
+            setState('businessName', e.target.value);
           }}
         />
         <Input
@@ -142,7 +142,7 @@ const Header: React.FC = () => {
           isTextArea
           value={state.businessHeaderFreeText}
           onChange={(e) => {
-            setState("businessHeaderFreeText", e.target.value);
+            setState('businessHeaderFreeText', e.target.value);
           }}
         />
       </div>
@@ -158,12 +158,12 @@ const Header: React.FC = () => {
             onChange={(e) => {
               const newHeaderFields = [...state.headerFields];
               newHeaderFields[index].value = e.target.value;
-              setState("headerFields", newHeaderFields);
+              setState('headerFields', newHeaderFields);
             }}
             onLabelChange={(e) => {
               const newHeaderFields = [...state.headerFields];
               newHeaderFields[index].label = e.target.value;
-              setState("headerFields", newHeaderFields);
+              setState('headerFields', newHeaderFields);
             }}
           />
         ))}
@@ -182,7 +182,7 @@ const SubHeader: React.FC = () => {
           placeholder="Tax Invoice"
           value={state.invoiceSubheader}
           onChange={(e) => {
-            setState("invoiceSubheader", e.target.value);
+            setState('invoiceSubheader', e.target.value);
           }}
         />
         <Input
@@ -192,7 +192,7 @@ const SubHeader: React.FC = () => {
           isTextArea
           value={state.invoiceSubheaderFreeText}
           onChange={(e) => {
-            setState("invoiceSubheaderFreeText", e.target.value);
+            setState('invoiceSubheaderFreeText', e.target.value);
           }}
         />
       </div>
@@ -204,11 +204,11 @@ const InvoiceItemsTable: React.FC = () => {
   const { state, setState, formatAsCurrency } = useAppStateStore();
   const lineItems = state.lineItems;
   const setLineItems = (lineItems: typeof state.lineItems) =>
-    setState("lineItems", lineItems);
+    setState('lineItems', lineItems);
 
   const subtotal = lineItems.reduce(
     (acc, lineItem) => acc + (lineItem.price || 0) * (lineItem.quantity || 0),
-    0
+    0,
   );
   const taxPercent = state.taxRate;
   const tax = subtotal * (taxPercent || 0);
@@ -273,7 +273,7 @@ const InvoiceItemsTable: React.FC = () => {
               value={lineItem.quantity as any}
               onChange={(e) => {
                 const newLineItems = [...lineItems];
-                if (e.target.value === "") {
+                if (e.target.value === '') {
                   newLineItems[index].quantity = undefined;
                   setLineItems(newLineItems);
                   return;
@@ -291,7 +291,7 @@ const InvoiceItemsTable: React.FC = () => {
               value={lineItem.price as any}
               onChange={(e) => {
                 const newLineItems = [...lineItems];
-                if (e.target.value === "") {
+                if (e.target.value === '') {
                   newLineItems[index].price = undefined;
                   setLineItems(newLineItems);
                   return;
@@ -304,7 +304,7 @@ const InvoiceItemsTable: React.FC = () => {
           <div className="col-span-1 flex items-center">
             <span className="font-normal text-sm">
               {formatAsCurrency(
-                (lineItem.price || 0) * (lineItem.quantity || 0)
+                (lineItem.price || 0) * (lineItem.quantity || 0),
               )}
             </span>
           </div>
@@ -318,8 +318,8 @@ const InvoiceItemsTable: React.FC = () => {
               setLineItems([
                 ...lineItems,
                 {
-                  name: "",
-                  description: "",
+                  name: '',
+                  description: '',
                   quantity: 0,
                   price: 0,
                 },
@@ -383,11 +383,11 @@ const AdditionalNotes: React.FC = () => {
       <Input
         label={state.notesLabel}
         onLabelChange={(e) => {
-          setState("notesLabel", e.target.value);
+          setState('notesLabel', e.target.value);
         }}
         value={state.notesFreeText}
         onChange={(e) => {
-          setState("notesFreeText", e.target.value);
+          setState('notesFreeText', e.target.value);
         }}
         className="font-normal text-sm mt-2"
         labelClassName="font-semibold text-sm uppercase tracking-wider"
