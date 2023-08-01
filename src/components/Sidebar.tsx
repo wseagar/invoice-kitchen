@@ -26,10 +26,9 @@ export function Sidebar() {
       {/* Header */}
       <div className="flex justify-between items-center px-4 py-4 border-b border-gray-200">
         <span className="font-semibold text-md">Invoice Kitchen</span>
-        <Cross1Icon
-          className="flex items-center justify-center w-5 h-5 "
-          onClick={() => setState("sidebarOpen", false)}
-        />
+        <button onClick={() => setState("sidebarOpen", false)}>
+          <Cross1Icon className="w-5 h-5" />
+        </button>
       </div>
       <div className="px-4 py-2">
         <Accordion type="single" collapsible className="w-full">
