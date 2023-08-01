@@ -11,7 +11,16 @@ export function TaxOption() {
       <div className="grid gap-2">
         <HoverCard openDelay={200}>
           <HoverCardTrigger asChild>
-            <Label htmlFor="enableTax">Enable Tax</Label>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="enableTax"
+                checked={state.taxRate !== null}
+                onCheckedChange={(checkedState) => {
+                  setState('taxRate', checkedState ? 0.1 : null);
+                }}
+              />{' '}
+              <Label htmlFor="enableTax">Enable Tax</Label>
+            </div>
           </HoverCardTrigger>
           <HoverCardContent
             align="start"
@@ -21,13 +30,6 @@ export function TaxOption() {
             Enables tax calculation on the invoice.
           </HoverCardContent>
         </HoverCard>
-        <Checkbox
-          id="enableTax"
-          checked={state.taxRate !== null}
-          onCheckedChange={(checkedState) => {
-            setState('taxRate', checkedState ? 0.1 : null);
-          }}
-        />
       </div>
       {state.taxRate !== null && (
         <div className="grid gap-2">

@@ -103,12 +103,14 @@ const MainContent: React.FC = () => {
 const SidebarButton: React.FC = () => {
   const { state, setState } = useAppStateStore();
   return !state.sidebarOpen ? (
-    <button
-      className="absolute top-0 left-0 transform translate-x-full w-8 h-8 flex items-center justify-center"
-      onClick={() => setState('sidebarOpen', true)}
-    >
-      <HamburgerMenuIcon />
-    </button>
+    <div className="absolute top-2 left-2 ">
+      <button
+        className="p-4 flex items-center gap-2 hover:text-purple-700 "
+        onClick={() => setState('sidebarOpen', true)}
+      >
+        <HamburgerMenuIcon /> Menu
+      </button>
+    </div>
   ) : null;
 };
 

@@ -11,12 +11,19 @@ import { cx } from './InvoiceBuilder';
 import { useAppStateStore } from '@/store';
 import { TaxOption } from './TaxOption';
 import { LogoSelector } from './LogoSelector';
+import { Button } from '@/components/ui/button';
+import { Printer } from 'lucide-react';
+
+function printMe() {
+  window.print();
+}
 
 export function Sidebar() {
   const { setState, state } = useAppStateStore();
 
   return (
     <div
+      id="sidebar"
       className={cx(
         // todo: transition
         'h-full min-w-[300px] w-[300px] bg-white text-black overflow-auto',
@@ -25,7 +32,9 @@ export function Sidebar() {
     >
       {/* Header */}
       <div className="flex justify-between items-center px-4 py-4 border-b border-gray-200">
-        <span className="font-semibold text-md">Invoice Kitchen</span>
+        <div>
+          <span className="font-semibold text-md">Invoice Kitchen</span>
+        </div>
         <button onClick={() => setState('sidebarOpen', false)}>
           <Cross1Icon className="w-5 h-5" />
         </button>
@@ -51,6 +60,14 @@ export function Sidebar() {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+        <Button className="w-full my-2" onClick={printMe}>
+          {' '}
+          <Printer className="mr-2 h-4 " />
+          Print
+        </Button>
+      </div>
+      <div className="absolute bottom-0">
+        <img src="./chef.svg" className="w-40 h-40" />
       </div>
     </div>
   );

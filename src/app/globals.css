@@ -85,3 +85,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  #sidebar {
+    display: none;
+  }
+}
