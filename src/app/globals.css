@@ -86,10 +86,47 @@
 }
 
 @media print {
+  #add-item-button {
+    display: none;
+  }
   #sidebar {
     display: none;
   }
   @page {
     margin: 0;
+  }
+  textarea {
+    resize: none;
+  }
+
+  ::-webkit-input-placeholder {
+    color: transparent;
+  }
+  :-moz-placeholder {
+    color: transparent;
+  }
+  ::-moz-placeholder {
+    color: transparent;
+  }
+  :-ms-input-placeholder {
+    color: transparent;
+  }
+  input::placeholder {
+    color: transparent;
+  }
+  textarea::-webkit-input-placeholder {
+    color: transparent;
+  }
+  textarea:-moz-placeholder {
+    color: transparent;
+  }
+  textarea::-moz-placeholder {
+    color: transparent;
+  }
+  textarea:-ms-input-placeholder {
+    color: transparent;
+  }
+  textarea::placeholder {
+    color: transparent;
   }
 }

@@ -74,7 +74,6 @@ export default function InvoiceBuilderWrapper() {
 
 const InvoiceBuilder = observer(() => {
   const { state } = useAppStateStore();
-  console.log('state', state);
 
   return (
     <div className="h-[100vh] flex">
@@ -315,6 +314,7 @@ const InvoiceItemsTable: React.FC = () => {
       <div className="grid grid-cols-8 mt-4">
         <div className="col-span-5">
           <button
+            id="add-item-button"
             className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700"
             onClick={() => {
               setLineItems([
