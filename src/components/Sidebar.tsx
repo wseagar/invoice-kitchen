@@ -19,7 +19,7 @@ export function Sidebar() {
     <div
       className={cx(
         // todo: transition
-        'h-full min-w-[300px] bg-white text-black overflow-auto',
+        'h-full min-w-[300px] w-[300px] bg-white text-black overflow-auto',
         !state.sidebarOpen ? 'hidden' : '',
       )}
     >
