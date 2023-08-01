@@ -1,7 +1,5 @@
 import { useAppStateStore } from "@/store";
-import { HoverCard, HoverCardTrigger, HoverCardContent } from "./ui/hover-card";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 
 export function LogoSelector() {
   const { state, setState } = useAppStateStore();
@@ -13,16 +11,23 @@ export function LogoSelector() {
       setState("logo", reader.result as string);
     };
 
-    if (file) {
-      reader.readAsDataURL(file);
-    } else {
-      setState("logo", "");
+    if (!file) {
+      // We don't want to unset the current file when no file is selected
+      return;
     }
+
+    reader.readAsDataURL(file);
   };
 
   return (
     <div className="grid gap-2">
-      <Input type="file" id="logo" onChange={handleImageUpload} />
+      <Input
+        type="file"
+        id="logo"
+        accept="image/*"
+        className="cursor-pointer"
+        onChange={handleImageUpload}
+      />
       {state.logo && (
         <img src={state.logo} alt="logo" className="w-20 h-20 object-contain" />
       )}
