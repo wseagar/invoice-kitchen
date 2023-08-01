@@ -1,6 +1,7 @@
 "use client";
 
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent } from "react";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { Sidebar } from "./Sidebar";
 import { StoreContext, store, useAppStateStore } from "@/store";
 import { observer } from "mobx-react-lite";
@@ -103,13 +104,10 @@ const SidebarButton: React.FC = () => {
   const { state, setState } = useAppStateStore();
   return !state.sidebarOpen ? (
     <button
-      className="text-black absolute top-0 left-0 transform translate-x-full group-hover:flex w-8 h-8 items-center justify-center text-lg"
-      onClick={() => {
-        console.log("HERE");
-        setState("sidebarOpen", true);
-      }}
+      className="absolute top-0 left-0 transform translate-x-full w-8 h-8 flex items-center justify-center"
+      onClick={() => setState("sidebarOpen", true)}
     >
-      =
+      <HamburgerMenuIcon />
     </button>
   ) : null;
 };
