@@ -49,9 +49,6 @@ export function CurrencySelector() {
   return (
     <div className="grid gxap-2">
       <HoverCard openDelay={200}>
-        <HoverCardTrigger asChild>
-          <Label htmlFor="currency">Currency</Label>
-        </HoverCardTrigger>
         <HoverCardContent
           align="start"
           className="w-[260px] text-sm"
