@@ -14,10 +14,6 @@ import { LogoSelector } from './LogoSelector';
 import { Button } from '@/components/ui/button';
 import { Printer, SaveIcon } from 'lucide-react';
 
-function printMe() {
-  window.print();
-}
-
 export function Sidebar() {
   const { setState, state } = useAppStateStore();
 
@@ -60,7 +56,7 @@ export function Sidebar() {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-        <Button className="w-full my-2" onClick={() => window.print()}>
+        {/* <Button className="w-full my-2" onClick={() => window.print()}>
           {' '}
           <Printer className="mr-2 h-4 " />
           Print
@@ -69,7 +65,7 @@ export function Sidebar() {
           {' '}
           <SaveIcon className="mr-2 h-4 " />
           PDF
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

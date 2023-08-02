@@ -43,43 +43,47 @@ export type InvoiceLineItem = {
   price?: number;
 };
 
+function defaultInvoice() {
+  return {
+    sidebarOpen: false,
+    previewMode: false,
+    currency: {
+      name: 'United States Dollar',
+      value: 'USD',
+    },
+    taxRate: null,
+    logo: null,
+
+    businessName: '',
+    businessHeaderFreeText: '',
+    headerFields: [
+      {
+        label: 'INVOICE #',
+        value: '',
+        placeholder: 'INV-0001',
+      },
+      {
+        label: 'DATE',
+        value: new Date().toLocaleDateString(),
+        placeholder: '01/01/2021',
+      },
+    ],
+    invoiceSubheader: 'TAX INVOICE',
+    invoiceSubheaderFreeText: '',
+    notesLabel: 'NOTES',
+    notesFreeText: '',
+
+    lineItems: [],
+  };
+}
+
 class AppStateStore {
   rootStore: RootStore;
   state: AppState;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
-    this.state = {
-      sidebarOpen: false,
-      previewMode: false,
-      currency: {
-        name: 'United States Dollar',
-        value: 'USD',
-      },
-      taxRate: null,
-      logo: null,
-
-      businessName: '',
-      businessHeaderFreeText: '',
-      headerFields: [
-        {
-          label: 'INVOICE #',
-          value: '',
-          placeholder: 'INV-0001',
-        },
-        {
-          label: 'DATE',
-          value: '',
-          placeholder: '01/01/2021',
-        },
-      ],
-      invoiceSubheader: 'TAX INVOICE',
-      invoiceSubheaderFreeText: '',
-      notesLabel: 'NOTES',
-      notesFreeText: '',
-
-      lineItems: [],
-    };
+    this.state = defaultInvoice();
 
     makeAutoObservable(this);
   }
@@ -93,6 +97,44 @@ class AppStateStore {
 
   setState = <K extends keyof AppState>(key: K, value: AppState[K]): void => {
     this.state[key] = value;
+  };
+
+  newInvoice = () => {
+    const previousInvoiceNumber = this.state.headerFields?.[0].value || '';
+    // this may be a string but contains a number inside.
+    // use a regex to extract the number part and increment it.
+
+    const numberPart = previousInvoiceNumber.match(/\d+/)?.[0] || '';
+    const numberLength = numberPart.length;
+
+    const incrementedNumber = Number(numberPart) + 1;
+
+    // Pad the incremented number with zeros to maintain the same number of digits.
+    const paddedNumber = String(incrementedNumber).padStart(numberLength, '0');
+
+    const newInvoiceNumber = previousInvoiceNumber.replace(
+      numberPart,
+      paddedNumber,
+    );
+
+    this.setState('lineItems', []);
+    this.setState('headerFields', [
+      {
+        label: 'INVOICE #',
+        value: newInvoiceNumber,
+        placeholder: 'INV-0001',
+      },
+      {
+        label: 'DATE',
+        value: new Date().toLocaleDateString(),
+        placeholder: '01/01/2021',
+      },
+    ]);
+    this.setState('invoiceSubheaderFreeText', '');
+  };
+
+  clearInvoice = () => {
+    this.state = defaultInvoice();
   };
 }
 

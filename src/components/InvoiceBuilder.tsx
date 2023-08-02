@@ -7,6 +7,19 @@ import { StoreContext, store, useAppStateStore } from '@/store';
 import { observer } from 'mobx-react-lite';
 import { HoverCard, HoverCardContent } from './ui/hover-card';
 import { HoverCardTrigger } from '@radix-ui/react-hover-card';
+import { FilePlus, PrinterIcon, SaveIcon } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog';
+import { Label } from './ui/label';
+import { Button } from './ui/button';
+import { TopRightButtons } from './TopRightButtons';
 
 export function cx(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
@@ -90,6 +103,7 @@ const MainContent: React.FC = () => {
   return (
     <div className="h-full w-full overflow-auto flex justify-center items-center bg-gray-100 pt-8 pb-8">
       <SidebarButton />
+      <TopRightButtons />
       <Chef />
       <div className="a4 shadow-lg print:shadow-none m-8 text-black flex flex-col gap-8">
         <Header />
@@ -139,7 +153,7 @@ const Chef: React.FC = () => {
   const tip = CHEFS_TIPS[tipIdx];
 
   return (
-    <div className="absolute bottom-2 right-2">
+    <div id="chef" className="absolute bottom-2 right-2">
       <HoverCard>
         <HoverCardTrigger>
           <img src="./chef.svg" className="w-40 h-40" />

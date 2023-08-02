@@ -86,6 +86,10 @@
 }
 
 @media print {
+  #chef {
+    display: none;
+  }
+
   #add-item-button {
     display: none;
   }
