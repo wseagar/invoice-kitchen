@@ -88,8 +88,14 @@ export default function InvoiceBuilderWrapper() {
 }
 
 const InvoiceBuilder = observer(() => {
+  // Will: Don't remove the hidden div state here.
+  // if this isn't used then state never updates in any other component.
+  // I think technically every component that uses state should be wrapped in observer
+  // but this works so oh well.
+  const { state } = useAppStateStore();
   return (
     <div className="h-[100vh] flex">
+      <pre className="hidden">{JSON.stringify(state, null, 2)}</pre>
       <Sidebar />
       <MainContent />
     </div>
