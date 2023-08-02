@@ -12,6 +12,7 @@ import { Button } from './ui/button';
 import { DialogHeader, DialogFooter } from './ui/dialog';
 import { Input } from './ui/input';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 const NewButton = () => {
   const { newInvoice } = useAppStateStore();
@@ -136,6 +137,9 @@ const AfterPrintPdfDialog = ({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) => {
+  const [token, setToken] = React.useState('');
+  const [email, setEmail] = React.useState('');
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
@@ -151,11 +155,29 @@ const AfterPrintPdfDialog = ({
             <Label htmlFor="email" className="text-right">
               Email
             </Label>
-            <Input id="email" value="hello@email.com" className="col-span-3" />
+            <Input
+              id="email"
+              value={email}
+              className="col-span-3"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
           </div>
+          <Turnstile
+            siteKey="0x4AAAAAAAIMHH3XH4HezMXA"
+            onSuccess={setToken}
+            options={{
+              theme: 'light',
+              appearance: 'interaction-only',
+            }}
+          />
         </div>
+
         <DialogFooter>
-          <Button type="submit">Send</Button>
+          <Button type="submit" disabled={!email || !token}>
+            Send
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -169,6 +191,8 @@ const EmailMePdfDialog = ({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) => {
+  const [token, setToken] = React.useState('');
+  const [email, setEmail] = React.useState('');
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
@@ -187,11 +211,28 @@ const EmailMePdfDialog = ({
             <Label htmlFor="email" className="text-right">
               Email
             </Label>
-            <Input id="email" value="hello@email.com" className="col-span-3" />
+            <Input
+              id="email"
+              value={email}
+              className="col-span-3"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
           </div>
+          <Turnstile
+            siteKey="0x4AAAAAAAIMHH3XH4HezMXA"
+            onSuccess={setToken}
+            options={{
+              theme: 'light',
+              appearance: 'interaction-only',
+            }}
+          />
         </div>
         <DialogFooter>
-          <Button type="submit">Send</Button>
+          <Button type="submit" disabled={!email || !token}>
+            Send
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
