@@ -146,8 +146,8 @@ const AfterPrintPdfDialog = ({
         <DialogHeader>
           <DialogTitle>Thanks for using Invoice Kitchen!</DialogTitle>
           <DialogDescription>
-            Enter your email below and we'll send you a PDF copy of your invoice
-            for your records.
+            Enter your email below and we&apos;ll send you a PDF copy of your
+            invoice for your records.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -202,8 +202,8 @@ const EmailMePdfDialog = ({
             The Invoice Chef needs a moment to finish cooking.
           </DialogDescription>
           <DialogDescription>
-            Enter your email below and we'll email you a copy of your invoice
-            momentarily.
+            Enter your email below and we&apos;ll email you a copy of your
+            invoice momentarily.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

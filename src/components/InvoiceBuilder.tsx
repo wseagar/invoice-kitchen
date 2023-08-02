@@ -88,11 +88,8 @@ export default function InvoiceBuilderWrapper() {
 }
 
 const InvoiceBuilder = observer(() => {
-  const { state } = useAppStateStore();
-
   return (
     <div className="h-[100vh] flex">
-      <pre className="hidden">{JSON.stringify(state, null, 2)}</pre>
       <Sidebar />
       <MainContent />
     </div>

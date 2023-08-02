@@ -98,11 +98,14 @@ class AppStateStore {
   };
 
   saveToLocalStorage = () => {
-    localStorage.setItem('invoice-chef', JSON.stringify(this.state));
+    window.localStorage.setItem('invoice-chef', JSON.stringify(this.state));
   };
 
   loadFromLocalStorage = () => {
-    const savedState = localStorage.getItem('invoice-chef');
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const savedState = window.localStorage.getItem('invoice-chef');
     if (savedState) {
       const parsedState = JSON.parse(savedState);
       if (parsedState.version === CURRENT_STATE_VERSION) {
