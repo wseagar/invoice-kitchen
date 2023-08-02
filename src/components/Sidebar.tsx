@@ -12,7 +12,7 @@ import { useAppStateStore } from '@/store';
 import { TaxOption } from './TaxOption';
 import { LogoSelector } from './LogoSelector';
 import { Button } from '@/components/ui/button';
-import { Printer } from 'lucide-react';
+import { Printer, SaveIcon } from 'lucide-react';
 
 function printMe() {
   window.print();
@@ -60,14 +60,16 @@ export function Sidebar() {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-        <Button className="w-full my-2" onClick={printMe}>
+        <Button className="w-full my-2" onClick={() => window.print()}>
           {' '}
           <Printer className="mr-2 h-4 " />
           Print
         </Button>
-      </div>
-      <div className="absolute bottom-0">
-        <img src="./chef.svg" className="w-40 h-40" />
+        <Button className="w-full my-2" onClick={printMe}>
+          {' '}
+          <SaveIcon className="mr-2 h-4 " />
+          PDF
+        </Button>
       </div>
     </div>
   );

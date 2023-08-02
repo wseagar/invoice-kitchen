@@ -5,6 +5,8 @@ import { Cross1Icon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { Sidebar } from './Sidebar';
 import { StoreContext, store, useAppStateStore } from '@/store';
 import { observer } from 'mobx-react-lite';
+import { HoverCard, HoverCardContent } from './ui/hover-card';
+import { HoverCardTrigger } from '@radix-ui/react-hover-card';
 
 export function cx(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
@@ -88,6 +90,7 @@ const MainContent: React.FC = () => {
   return (
     <div className="h-full w-full overflow-auto flex justify-center items-center bg-gray-100 pt-8 pb-8">
       <SidebarButton />
+      <Chef />
       <div className="a4 shadow-lg print:shadow-none m-8 text-black flex flex-col gap-8">
         <Header />
         <div className="border-b border-gray-300" />
@@ -111,6 +114,52 @@ const SidebarButton: React.FC = () => {
       </button>
     </div>
   ) : null;
+};
+
+const CHEFS_TIPS = [
+  "'Ello there, mate! Always serve your invoices piping hot! The sooner you dispatch 'em, the faster you'll see your quid.",
+  'An invoice without itemised details is like a pie without filling! Always clarify your charges.',
+  'Keep your payment terms as clear as a well-brewed cup of tea. No ambiguity, less fuss, got it?',
+  'Your invoice ought to look as sharp as a cheddar! Use a classy template that mirrors your business persona.',
+  "Keep your invoicing consistent, mate. It's like keeping your chips properly salted, gives your clients what they expect.",
+  "Never send off an invoice without giving it a once-over. It's like sending out a steak without checking the temp!",
+  'Invoice numbers should be as unique as every fish in the chips! Keep them sequential for simple tracking.',
+  "Follow up on unpaid invoices as surely as fish follows chips! Don't let 'em forget what they owe.",
+  "No overcharging or undercharging, got it? It's like serving your portions right. Be fair and crystal clear with your pricing.",
+  "Invoices aren't like fine whisky, they don't age well. Push to have them settled on time, every bloody time!",
+  "Be worldly with your invoices, yeah? Serve 'em in different currencies for your international clients.",
+  'Make your payment methods varied, just like a full English breakfast! Plenty of options to make it easier for your clients.',
+  "Include your contact details in the invoice, mate. It's like adding the right sauce to your dish - helps sort out the doubts.",
+  'Think of your late payment fees as the vinegar to your chips – it’s got to be there, but make sure your clients are aware before they dive in!',
+  "After the invoice is settled, don't forget to thank your client. It's the perfect mint to finish off the meal.",
+];
+
+const Chef: React.FC = () => {
+  const [tipIdx, setTipIdx] = React.useState(0);
+  const tip = CHEFS_TIPS[tipIdx];
+
+  return (
+    <div className="absolute bottom-2 right-2">
+      <HoverCard>
+        <HoverCardTrigger>
+          <img src="./chef.svg" className="w-40 h-40" />
+        </HoverCardTrigger>
+        <HoverCardContent>
+          <div className="text-sm">{tip}</div>
+          <div className="flex justify-end">
+            <button
+              className="text-sm text-gray-500 hover:text-gray-700"
+              onClick={() => {
+                setTipIdx((tipIdx + 1) % CHEFS_TIPS.length);
+              }}
+            >
+              Next tip
+            </button>
+          </div>
+        </HoverCardContent>
+      </HoverCard>
+    </div>
+  );
 };
 
 const Header: React.FC = () => {
