@@ -3,10 +3,7 @@ import React from 'react';
 
 import { makeAutoObservable } from 'mobx';
 
-type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<U[keyof U]>;
-type PartialPaths<T> = {
-  [K in keyof T]: T[K] extends object ? T[K] | PartialPaths<T[K]> : T[K];
-};
+const CURRENT_STATE_VERSION = '1';
 
 export type HeaderField = {
   label: string;
@@ -15,6 +12,8 @@ export type HeaderField = {
 };
 
 export type AppState = {
+  version: string;
+
   sidebarOpen: boolean;
   previewMode: boolean;
 
@@ -43,8 +42,9 @@ export type InvoiceLineItem = {
   price?: number;
 };
 
-function defaultInvoice() {
+function defaultInvoice(): AppState {
   return {
+    version: CURRENT_STATE_VERSION,
     sidebarOpen: false,
     previewMode: false,
     currency: {
@@ -84,6 +84,8 @@ class AppStateStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     this.state = defaultInvoice();
+    // overrides this.state if it exists
+    this.loadFromLocalStorage();
 
     makeAutoObservable(this);
   }
@@ -95,8 +97,23 @@ class AppStateStore {
     }).format(value);
   };
 
+  saveToLocalStorage = () => {
+    localStorage.setItem('invoice-chef', JSON.stringify(this.state));
+  };
+
+  loadFromLocalStorage = () => {
+    const savedState = localStorage.getItem('invoice-chef');
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      if (parsedState.version === CURRENT_STATE_VERSION) {
+        this.state = parsedState;
+      }
+    }
+  };
+
   setState = <K extends keyof AppState>(key: K, value: AppState[K]): void => {
     this.state[key] = value;
+    this.saveToLocalStorage();
   };
 
   newInvoice = () => {
@@ -135,6 +152,7 @@ class AppStateStore {
 
   clearInvoice = () => {
     this.state = defaultInvoice();
+    this.saveToLocalStorage();
   };
 }
 
