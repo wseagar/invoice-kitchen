@@ -29,7 +29,7 @@ export const InvoiceEmail = ({ inviteLink = '' }: { inviteLink: string }) => {
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
             <Section className="mt-[32px]">
               <Img
-                src={'https://www.invoice.kitchen/chef.jpg'}
+                src={'https://www.invoice.kitchen/chef.jpeg'}
                 width="40"
                 height="37"
                 alt="Invoice Kitchen Chef"
