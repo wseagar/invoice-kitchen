@@ -219,21 +219,21 @@ const SidebarButton: React.FC = () => {
 };
 
 const CHEFS_TIPS = [
-  "'Ello there, mate! Always serve your invoices piping hot! The sooner you dispatch 'em, the faster you'll see your quid.",
-  'An invoice without itemised details is like a pie without filling! Always clarify your charges.',
-  'Keep your payment terms as clear as a well-brewed cup of tea. No ambiguity, less fuss, got it?',
-  'Your invoice ought to look as sharp as a cheddar! Use a classy template that mirrors your business persona.',
-  "Keep your invoicing consistent, mate. It's like keeping your chips properly salted, gives your clients what they expect.",
-  "Never send off an invoice without giving it a once-over. It's like sending out a steak without checking the temp!",
-  'Invoice numbers should be as unique as every fish in the chips! Keep them sequential for simple tracking.',
-  "Follow up on unpaid invoices as surely as fish follows chips! Don't let 'em forget what they owe.",
-  "No overcharging or undercharging, got it? It's like serving your portions right. Be fair and crystal clear with your pricing.",
-  "Invoices aren't like fine whisky, they don't age well. Push to have them settled on time, every bloody time!",
-  "Be worldly with your invoices, yeah? Serve 'em in different currencies for your international clients.",
-  'Make your payment methods varied, just like a full English breakfast! Plenty of options to make it easier for your clients.',
-  "Include your contact details in the invoice, mate. It's like adding the right sauce to your dish - helps sort out the doubts.",
-  'Think of your late payment fees as the vinegar to your chips – it’s got to be there, but make sure your clients are aware before they dive in!',
-  "After the invoice is settled, don't forget to thank your client. It's the perfect mint to finish off the meal.",
+  'Ciao! Remember, always serve your invoices al dente - firm to the bite! Send them out as soon as you can.',
+  'An invoice without itemised details is like spaghetti without tomato sauce - it lacks substance! Make sure to specify your charges.',
+  'Payment terms should be as clear as a bellini cocktail. It keeps any disputes at bay, capisce?',
+  'Your invoice should reflect your business, just like a perfect tiramisu reflects the skill of the chef. Use a stylish template!',
+  'Keep your invoicing as consistent as a well-made risotto. It helps your clients know what to expect, si?',
+  "No invoice should leave the kitchen without a check - it's like tasting the sauce before you serve it.",
+  'Invoice numbers should be as unique as every shape of pasta! Keep them in sequence for easier tracking.',
+  "Follow up on unpaid invoices, just like you'd follow up on a missing cannoli order! Don't let them forget.",
+  "No overcharging or undercharging, amico. It's like getting the salt right in your pasta water. Be transparent!",
+  "Aging? It's good for Parmigiano-Reggiano, not invoices. Aim for them to be paid pronto!",
+  'For your international clients, serve your invoices in different currencies, just like offering different types of pasta.',
+  'Payment methods should be varied, like the ingredients in a caponata! The more options, the better for your clients.',
+  "Put your contact details in your invoice. It's like a recipe - people need to know where to ask their questions!",
+  'Late payment fees are the extra kick of chili in arrabbiata sauce - must be mentioned upfront to avoid surprises!',
+  "After the invoice is paid, a 'grazie' is always welcome. It's the sweet limoncello after a satisfying meal.",
 ];
 
 const Chef: React.FC = () => {
