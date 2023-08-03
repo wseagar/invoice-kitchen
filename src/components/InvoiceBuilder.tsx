@@ -160,6 +160,7 @@ export default function InvoiceBuilderWrapper({
 }
 
 const InvoiceBuilder = observer(() => {
+  const { state, showTour } = useAppStateStore();
   const router = useRouter();
   const searchParams = useSearchParams();
   if (searchParams.get('token')) {
@@ -167,13 +168,14 @@ const InvoiceBuilder = observer(() => {
   }
 
   useEffect(() => {
-    driverObj.drive();
+    if (showTour) {
+      driverObj.drive();
+    }
   }, []);
   // Will: Don't remove the hidden div state here.
   // if this isn't used then state never updates in any other component.
   // I think technically every component that uses state should be wrapped in observer
   // but this works so oh well.
-  const { state } = useAppStateStore();
 
   return (
     <div className="h-[100vh] flex">

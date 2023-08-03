@@ -103,12 +103,21 @@ function defaultInvoice(): AppState {
 
 class AppStateStore {
   state: AppState;
+  showTour: boolean = true;
 
   constructor(serverState?: AppState) {
-    this.state = serverState || presetInvoice();
-    // overrides this.state if it exists
-    if (serverState === undefined) {
-      this.loadFromLocalStorage();
+    if (serverState) {
+      this.state = serverState;
+      this.showTour = false;
+    } else {
+      const localState = this.loadFromLocalStorage();
+      if (localState) {
+        this.state = localState;
+        this.showTour = false;
+      } else {
+        this.state = presetInvoice();
+        this.showTour = true;
+      }
     }
 
     makeAutoObservable(this);
@@ -133,9 +142,10 @@ class AppStateStore {
     if (savedState) {
       const parsedState = JSON.parse(savedState);
       if (parsedState.version === CURRENT_STATE_VERSION) {
-        this.state = parsedState;
+        return parsedState;
       }
     }
+    return;
   };
 
   setState = <K extends keyof AppState>(key: K, value: AppState[K]): void => {
