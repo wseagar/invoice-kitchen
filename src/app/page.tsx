@@ -10,7 +10,6 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  console.log(searchParams);
   const token = searchParams.token;
   if (token && typeof token === 'string') {
     // validate jwt

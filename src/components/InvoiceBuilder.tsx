@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { Cross1Icon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { Sidebar } from './Sidebar';
 import { StoreContext, initStore, store, useAppStateStore } from '@/store';
@@ -10,8 +10,69 @@ import { HoverCardTrigger } from '@radix-ui/react-hover-card';
 import { TopRightButtons } from './TopRightButtons';
 import { AppState } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
+// @ts-ignore
+import { driver } from 'driver.js';
+import 'driver.js/dist/driver.css';
 
-export function cx(...classes: (string | undefined)[]) {
+const driverObj = driver({
+  showProgress: true,
+  steps: [
+    {
+      element: '#business-name-input',
+      popover: {
+        title: 'Invoice Kitchen',
+        description:
+          'Click on the page to start typing. You can edit the text just like in any other text editor.',
+        position: 'bottom',
+      },
+    },
+    {
+      popover: {
+        title: 'Auto Save',
+        description:
+          'As you type, your browser automatically saves all your changes. No need to worry about losing your work!',
+        position: 'top',
+      },
+    },
+    {
+      element: '#sidebar-button',
+      popover: {
+        title: 'Invoice Menu',
+        description:
+          'Here you can set tax percentage, select currency for your invoice, and update your company logo.',
+        position: 'right',
+      },
+    },
+    {
+      element: '#top-right-buttons',
+      popover: {
+        title: 'Sidebar',
+        description:
+          'Here are several options. We start everyone out with a example invoice but you can click clear if you want to start from scratch.',
+        position: 'left',
+      },
+    },
+    {
+      element: '#chef',
+      popover: {
+        title: 'Chef Tips',
+        description:
+          'Hover your mouse over the invoice chef and he will give you some friendly tips on how to cook up a great invoice.',
+      },
+    },
+    {
+      element: '#end-tour',
+      popover: {
+        title: 'End of Tutorial',
+        description:
+          "You're all set to create professional invoices using our online editor. Happy invoicing!",
+        position: 'center',
+      },
+    },
+  ],
+});
+
+export function cx(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
@@ -104,6 +165,10 @@ const InvoiceBuilder = observer(() => {
   if (searchParams.get('token')) {
     router.push('/', { scroll: false });
   }
+
+  useEffect(() => {
+    driverObj.drive();
+  }, []);
   // Will: Don't remove the hidden div state here.
   // if this isn't used then state never updates in any other component.
   // I think technically every component that uses state should be wrapped in observer
@@ -125,7 +190,10 @@ const MainContent: React.FC = () => {
       <SidebarButton />
       <TopRightButtons />
       <Chef />
-      <div className="a4 shadow-lg print:shadow-none m-8 text-black flex flex-col gap-8">
+      <div
+        id="invoice-page"
+        className="a4 shadow-lg print:shadow-none m-8 text-black flex flex-col gap-8"
+      >
         <Header />
         <div className="border-b border-gray-300" />
         <SubHeader />
@@ -139,7 +207,7 @@ const MainContent: React.FC = () => {
 const SidebarButton: React.FC = () => {
   const { state, setState } = useAppStateStore();
   return !state.sidebarOpen ? (
-    <div className="absolute top-2 left-2 print:hidden">
+    <div id="sidebar-button" className="absolute top-2 left-2 print:hidden">
       <button
         className="p-4 flex items-center gap-2 hover:text-purple-700 "
         onClick={() => setState('sidebarOpen', true)}
@@ -211,6 +279,7 @@ const Header: React.FC = () => {
       )}
       <div className={state.logo ? 'col-span-3' : 'col-span-4'}>
         <Input
+          id="business-name-input"
           className="font-semibold text-sm"
           placeholder="Business Name"
           value={state.businessName}

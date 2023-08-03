@@ -19,6 +19,7 @@ import { DialogHeader, DialogFooter } from './ui/dialog';
 import { Input } from './ui/input';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
 import { Turnstile } from '@marsidev/react-turnstile';
+import { set } from 'mobx';
 
 const NewButton = () => {
   const [open, setOpen] = React.useState(false);
@@ -245,6 +246,7 @@ const AfterPrintPdfDialog = ({
             disabled={!email || !token}
             onClick={() => {
               sendInvoice(email, token);
+              setOpen(false);
             }}
           >
             Send
@@ -308,6 +310,7 @@ const EmailMePdfDialog = ({
             disabled={!email}
             onClick={() => {
               sendInvoice(email, token);
+              setOpen(false);
             }}
           >
             Send
@@ -320,7 +323,7 @@ const EmailMePdfDialog = ({
 
 export const TopRightButtons: React.FC = () => {
   return (
-    <div className="absolute top-2 right-2 print:hidden">
+    <div id="top-right-buttons" className="absolute top-2 right-2 print:hidden">
       <NewButton />
       <PrintButton />
       <PDFButton />
