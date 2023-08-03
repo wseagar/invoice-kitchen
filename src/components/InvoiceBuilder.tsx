@@ -91,7 +91,7 @@ export default function InvoiceBuilderWrapper({
   return (
     <ClientOnly>
       <StoreContext.Provider value={store}>
-        <InvoiceBuilder invoice={invoice} />
+        <InvoiceBuilder />
       </StoreContext.Provider>
     </ClientOnly>
   );
