@@ -185,7 +185,7 @@ class AppStateStore {
     this.saveToLocalStorage();
   };
 
-  presetInovice = () => {
+  fillWithPresetInvoice = () => {
     this.state = presetInvoice();
     this.saveToLocalStorage();
   };
