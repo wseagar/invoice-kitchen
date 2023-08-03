@@ -3,23 +3,12 @@
 import React, { ChangeEvent } from 'react';
 import { Cross1Icon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { Sidebar } from './Sidebar';
-import { StoreContext, store, useAppStateStore } from '@/store';
+import { StoreContext, initStore, store, useAppStateStore } from '@/store';
 import { observer } from 'mobx-react-lite';
 import { HoverCard, HoverCardContent } from './ui/hover-card';
 import { HoverCardTrigger } from '@radix-ui/react-hover-card';
-import { FilePlus, PrinterIcon, SaveIcon } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from './ui/dialog';
-import { Label } from './ui/label';
-import { Button } from './ui/button';
 import { TopRightButtons } from './TopRightButtons';
+import { AppState } from '@/types';
 
 export function cx(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
@@ -93,11 +82,16 @@ function ClientOnly({ children }: { children: React.ReactNode }) {
   return <div>{children}</div>;
 }
 
-export default function InvoiceBuilderWrapper() {
+export default function InvoiceBuilderWrapper({
+  invoice,
+}: {
+  invoice?: AppState;
+}) {
+  const store = initStore(invoice);
   return (
     <ClientOnly>
       <StoreContext.Provider value={store}>
-        <InvoiceBuilder />
+        <InvoiceBuilder invoice={invoice} />
       </StoreContext.Provider>
     </ClientOnly>
   );
@@ -109,6 +103,7 @@ const InvoiceBuilder = observer(() => {
   // I think technically every component that uses state should be wrapped in observer
   // but this works so oh well.
   const { state } = useAppStateStore();
+
   return (
     <div className="h-[100vh] flex">
       <pre className="hidden">{JSON.stringify(state, null, 2)}</pre>

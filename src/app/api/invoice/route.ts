@@ -5,16 +5,8 @@ import { createId } from '@paralleldrive/cuid2';
 import jwt from 'jsonwebtoken';
 import { Resend } from 'resend';
 import { ApifyClient } from 'apify-client';
-
-const config = {
-  SIGNING_KEY: process.env.SIGNING_KEY as string,
-  CLOUDFLARE_TURNSTILE_SECRET_KEY: process.env
-    .CLOUDFLARE_TURNSTILE_SECRET_KEY as string,
-  RESEND_API_KEY: process.env.RESEND_API_KEY as string,
-  APIFY_TOKEN: process.env.APIFY_TOKEN as string,
-  APIFY_PDF_RENDER_ACTOR: process.env.APIFY_PDF_RENDER_ACTOR as string,
-  NODE_ENV: process.env.NODE_ENV as string,
-};
+import InvoiceEmail from '@/email/InvoiceEmail';
+import { config } from '@/lib/config';
 
 const resend = new Resend(config.RESEND_API_KEY);
 const apify = new ApifyClient({
@@ -22,14 +14,20 @@ const apify = new ApifyClient({
 });
 
 export async function POST(request: Request) {
+  console.log('api.invoice.POST.start');
   const {
     email,
     invoice,
     token,
   }: { email: string; invoice: AppState; token: string } = await request.json();
+  console.log('api.invoice.POST.body.email', email);
+  console.log('api.invoice.POST.body.invoice', invoice);
+  console.log('api.invoice.POST.body.token', token);
 
   // site verify
   if (config.NODE_ENV !== 'development') {
+    console.log('api.invoice.POST.siteverify.start');
+
     const form = new URLSearchParams();
     form.append('secret', config.CLOUDFLARE_TURNSTILE_SECRET_KEY);
     form.append('response', token);
@@ -42,46 +40,71 @@ export async function POST(request: Request) {
     const json = await result.json();
 
     if (!json.success) {
+      console.log('api.invoice.POST.siteverify.fail');
       return new Response('Invalid captcha', { status: 400 });
     }
+    console.log('api.invoice.POST.siteverify.success');
   }
 
+  console.log('api.invoice.POST.kv.start');
   const fileId = createId();
 
   const key = `${email}:invoice:${invoice.identifier}:${fileId}`;
 
+  console.log('api.invoice.POST.kv.hset', key);
   await kv.hset(key, invoice);
+  console.log('api.invoice.POST.kv.success');
 
+  console.log('api.invoice.POST.jwt.start');
   const jwtData = {
     key,
   };
 
   const jwtToken = jwt.sign(jwtData, config.SIGNING_KEY);
+  console.log('api.invoice.POST.jwt.success', jwtToken);
 
+  console.log('api.invoice.POST.apify.start', {
+    actor: config.APIFY_PDF_RENDER_ACTOR,
+    jwt: jwtToken,
+    fileId: fileId,
+  });
   const run = await apify.actor(config.APIFY_PDF_RENDER_ACTOR).call({
     jwt: jwtToken,
     fileId: fileId,
   });
+  console.log('api.invoice.POST.apify.success', run.id, run.finishedAt);
 
   const apifyDocumentStore = run.defaultKeyValueStoreId;
 
   const apifyKvStoreClient = await apify.keyValueStore(apifyDocumentStore);
 
+  console.log('api.invoice.POST.apify.pdf.start', fileId);
   const pdf = await apifyKvStoreClient.getRecord(fileId, {
     buffer: true,
   });
-
   if (!pdf) {
+    console.log('api.invoice.POST.apify.pdf.fail');
     return new Response('PDF not found', { status: 404 });
   }
+  console.log(
+    'api.invoice.POST.apify.pdf.success',
+    pdf?.key,
+    pdf?.value?.length,
+  );
+
+  console.log('api.invoice.POST.email.start');
+  const isLocal = config.NODE_ENV === 'development';
+  const inviteLink =
+    (isLocal ? `http://localhost:3000` : `https://invoice.kitchen`) +
+    `?token=${jwtToken}`;
 
   const pdfBuffer = pdf.value;
 
   const sendEmailResponse = await resend.emails.send({
     from: 'chef@invoicekitchen.com',
     to: email,
-    subject: 'Hello World',
-    html: `<p>${jwtToken}</p>`,
+    subject: 'Invoice Kitchen - Your invoice is ready!',
+    react: InvoiceEmail({ inviteLink }),
     attachments: [
       {
         content: pdfBuffer,
@@ -89,8 +112,15 @@ export async function POST(request: Request) {
       },
     ],
   });
+  console.log(
+    'api.invoice.POST.email.success',
+    inviteLink,
+    email,
+    pdfBuffer.length,
+  );
 
   if (!sendEmailResponse) {
+    console.log('api.invoice.POST.email.fail');
     return new Response('Email not sent', { status: 500 });
   }
 

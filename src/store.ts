@@ -44,14 +44,14 @@ function defaultInvoice(): AppState {
 }
 
 class AppStateStore {
-  rootStore: RootStore;
   state: AppState;
 
-  constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-    this.state = defaultInvoice();
+  constructor(serverState?: AppState) {
+    this.state = serverState || defaultInvoice();
     // overrides this.state if it exists
-    this.loadFromLocalStorage();
+    if (serverState === undefined) {
+      this.loadFromLocalStorage();
+    }
 
     makeAutoObservable(this);
   }
@@ -140,17 +140,17 @@ class AppStateStore {
   };
 }
 
-export class RootStore {
-  appStateStore: AppStateStore;
+export let store: AppStateStore | undefined = undefined;
+export let StoreContext: React.Context<AppStateStore> =
+  undefined as unknown as React.Context<AppStateStore>;
 
-  constructor() {
-    this.appStateStore = new AppStateStore(this);
+export const initStore = (serverState?: AppState) => {
+  if (!store) {
+    const _store = new AppStateStore(serverState);
+    store = _store;
+    StoreContext = React.createContext(_store);
   }
-}
+  return store;
+};
 
-export const store = new RootStore();
-export const StoreContext = React.createContext(store);
-
-export const useRootStore = () => React.useContext(StoreContext);
-export const useAppStateStore = () =>
-  React.useContext(StoreContext).appStateStore;
+export const useAppStateStore = () => React.useContext(StoreContext!);
