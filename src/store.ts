@@ -44,8 +44,7 @@ function presetInvoice(): AppState {
     lineItems: [
       {
         name: 'Website Design (Hours)',
-        description:
-          'Design for Johns website, includes 3 revisions and 1 round of feedback.',
+        description: 'Design for Johns website, includes 3 revisions.',
         quantity: 18,
         price: 70,
       },
