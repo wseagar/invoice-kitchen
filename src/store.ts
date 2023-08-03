@@ -4,8 +4,66 @@ import { createId } from '@paralleldrive/cuid2';
 
 import { makeAutoObservable } from 'mobx';
 import { AppState } from './types';
+import { SWIFTLY_ICON } from './lib/swiftlyIconBase64';
 
 const CURRENT_STATE_VERSION = '1';
+
+function presetInvoice(): AppState {
+  return {
+    identifier: createId(),
+    version: CURRENT_STATE_VERSION,
+    sidebarOpen: false,
+    previewMode: false,
+    currency: {
+      name: 'United States Dollar',
+      value: 'USD',
+    },
+    taxRate: 0.1,
+    logo: SWIFTLY_ICON,
+    businessName: 'Swiftly',
+    businessHeaderFreeText:
+      '123 Main St\nSan Francisco\nCA 94110\naccounts@swiftly.nz',
+    headerFields: [
+      {
+        label: 'INVOICE #',
+        value: 'INV-0001',
+        placeholder: 'INV-0001',
+      },
+      {
+        label: 'DATE',
+        value: new Date().toLocaleDateString(),
+        placeholder: '01/01/2021',
+      },
+    ],
+    invoiceSubheader: 'TAX INVOICE',
+    invoiceSubheaderFreeText:
+      'To: John Smith\n123 Main St, San Francisco, CA 94110\nUnited States\njohn@johnsmith.com',
+    notesLabel: 'NOTES',
+    notesFreeText:
+      'Thank you for your business!\nPayment is due via bank transfer within 30 days.\nACH: 123456789\nWire: 987654321',
+    lineItems: [
+      {
+        name: 'Website Design (Hours)',
+        description:
+          'Design for Johns website, includes 3 revisions and 1 round of feedback.',
+        quantity: 18,
+        price: 70,
+      },
+      {
+        name: 'Website Development (Hours)',
+        description: 'Wordpress development',
+        quantity: 30,
+        price: 75,
+      },
+      {
+        name: 'Website Hosting (1 year)',
+        description: '',
+        quantity: 1,
+        price: 100,
+      },
+    ],
+  };
+}
 
 function defaultInvoice(): AppState {
   return {
@@ -47,7 +105,7 @@ class AppStateStore {
   state: AppState;
 
   constructor(serverState?: AppState) {
-    this.state = serverState || defaultInvoice();
+    this.state = serverState || presetInvoice();
     // overrides this.state if it exists
     if (serverState === undefined) {
       this.loadFromLocalStorage();
@@ -81,6 +139,9 @@ class AppStateStore {
   };
 
   setState = <K extends keyof AppState>(key: K, value: AppState[K]): void => {
+    if (key === 'logo') {
+      console.log(value);
+    }
     this.state[key] = value;
     this.saveToLocalStorage();
   };
@@ -121,6 +182,11 @@ class AppStateStore {
 
   clearInvoice = () => {
     this.state = defaultInvoice();
+    this.saveToLocalStorage();
+  };
+
+  presetInovice = () => {
+    this.state = presetInvoice();
     this.saveToLocalStorage();
   };
 

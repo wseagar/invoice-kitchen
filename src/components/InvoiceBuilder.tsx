@@ -50,7 +50,7 @@ const Input: React.FC<InputProps> = ({
       {isTextArea ? (
         <textarea
           className="w-full"
-          rows={3}
+          rows={4}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
@@ -121,7 +121,7 @@ const InvoiceBuilder = observer(() => {
 
 const MainContent: React.FC = () => {
   return (
-    <div className="h-full w-full overflow-auto flex justify-center items-center bg-gray-100 pt-8 pb-8">
+    <div className="h-full w-full overflow-auto flex justify-center items-center bg-gray-100 pt-8 pb-8 print:pt-0 print:pb-0">
       <SidebarButton />
       <TopRightButtons />
       <Chef />
