@@ -30,8 +30,8 @@ export const InvoiceEmail = ({ inviteLink = '' }: { inviteLink: string }) => {
             <Section className="mt-[32px]">
               <Img
                 src={'https://www.invoice.kitchen/chef.jpeg'}
-                width="40"
-                height="37"
+                width="150"
+                height="150"
                 alt="Invoice Kitchen Chef"
                 className="my-0 mx-auto"
               />
@@ -52,15 +52,15 @@ export const InvoiceEmail = ({ inviteLink = '' }: { inviteLink: string }) => {
                 className="bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center"
                 href={inviteLink}
               >
-                Edit or Create Invoice
+                Edit Invoice
               </Button>
             </Section>
-            <Text className="text-black text-[14px] leading-[24px]">
+            {/* <Text className="text-black text-[14px] leading-[24px]">
               or copy and paste this URL into your browser:{' '}
               <Link href={inviteLink} className="text-blue-600 no-underline">
                 {inviteLink}
               </Link>
-            </Text>
+            </Text> */}
             {/* <Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
             <Text className="text-[#666666] text-[12px] leading-[24px]">
               This invitation was intended for{' '}
