@@ -9,6 +9,7 @@ import { HoverCard, HoverCardContent } from './ui/hover-card';
 import { HoverCardTrigger } from '@radix-ui/react-hover-card';
 import { TopRightButtons } from './TopRightButtons';
 import { AppState } from '@/types';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export function cx(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
@@ -98,6 +99,11 @@ export default function InvoiceBuilderWrapper({
 }
 
 const InvoiceBuilder = observer(() => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  if (searchParams.get('token')) {
+    router.push('/', { scroll: false });
+  }
   // Will: Don't remove the hidden div state here.
   // if this isn't used then state never updates in any other component.
   // I think technically every component that uses state should be wrapped in observer
