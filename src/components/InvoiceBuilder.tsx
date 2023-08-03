@@ -78,12 +78,28 @@ const Input: React.FC<InputProps> = ({
     </div>
   );
 };
+function ClientOnly({ children }: { children: React.ReactNode }) {
+  // State / Props
+  const [hasMounted, setHasMounted] = React.useState(false);
+
+  // Hooks
+  React.useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  // Render
+  if (!hasMounted) return null;
+
+  return <div>{children}</div>;
+}
 
 export default function InvoiceBuilderWrapper() {
   return (
-    <StoreContext.Provider value={store}>
-      <InvoiceBuilder />
-    </StoreContext.Provider>
+    <ClientOnly>
+      <StoreContext.Provider value={store}>
+        <InvoiceBuilder />
+      </StoreContext.Provider>
+    </ClientOnly>
   );
 }
 

@@ -137,6 +137,7 @@ const AfterPrintPdfDialog = ({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) => {
+  const { sendInvoice } = useAppStateStore();
   const [token, setToken] = React.useState('');
   const [email, setEmail] = React.useState('');
 
@@ -175,7 +176,13 @@ const AfterPrintPdfDialog = ({
         </div>
 
         <DialogFooter>
-          <Button type="submit" disabled={!email || !token}>
+          <Button
+            type="submit"
+            disabled={!email || !token}
+            onClick={() => {
+              sendInvoice(email, token);
+            }}
+          >
             Send
           </Button>
         </DialogFooter>
@@ -191,8 +198,10 @@ const EmailMePdfDialog = ({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) => {
+  const { sendInvoice } = useAppStateStore();
   const [token, setToken] = React.useState('');
   const [email, setEmail] = React.useState('');
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
@@ -230,7 +239,13 @@ const EmailMePdfDialog = ({
           />
         </div>
         <DialogFooter>
-          <Button type="submit" disabled={!email || !token}>
+          <Button
+            type="submit"
+            disabled={!email}
+            onClick={() => {
+              sendInvoice(email, token);
+            }}
+          >
             Send
           </Button>
         </DialogFooter>

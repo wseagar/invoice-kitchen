@@ -1,49 +1,15 @@
 'use client';
 import React from 'react';
+import { createId } from '@paralleldrive/cuid2';
 
 import { makeAutoObservable } from 'mobx';
+import { AppState } from './types';
 
 const CURRENT_STATE_VERSION = '1';
 
-export type HeaderField = {
-  label: string;
-  value: string;
-  placeholder: string;
-};
-
-export type AppState = {
-  version: string;
-
-  sidebarOpen: boolean;
-  previewMode: boolean;
-
-  currency: {
-    name: string;
-    value: string;
-  };
-  taxRate: number | null;
-  logo: string | null;
-
-  businessName: string;
-  businessHeaderFreeText: string;
-  headerFields: HeaderField[];
-  invoiceSubheader: string;
-  invoiceSubheaderFreeText: string;
-  notesLabel: string;
-  notesFreeText: string;
-
-  lineItems: InvoiceLineItem[];
-};
-
-export type InvoiceLineItem = {
-  name: string;
-  description: string;
-  quantity?: number;
-  price?: number;
-};
-
 function defaultInvoice(): AppState {
   return {
+    identifier: createId(),
     version: CURRENT_STATE_VERSION,
     sidebarOpen: false,
     previewMode: false,
@@ -156,6 +122,21 @@ class AppStateStore {
   clearInvoice = () => {
     this.state = defaultInvoice();
     this.saveToLocalStorage();
+  };
+
+  sendInvoice = async (email: string, token: string) => {
+    const invoice = this.state;
+
+    const response = await fetch('/api/invoice', {
+      method: 'POST',
+      body: JSON.stringify({ email, invoice, token }),
+    });
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
   };
 }
 
