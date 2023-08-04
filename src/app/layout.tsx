@@ -42,7 +42,7 @@ export default function RootLayout({
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-KY92RHEC41"
       ></Script>
-      <Script>
+      <Script id="ga-script">
         {`window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
