@@ -86,7 +86,7 @@ export async function POST(request: Request) {
     const run = await actorResultPromise;
 
     console.log('api.invoice.POST.apify.success', run.id, run.finishedAt);
-    return await sendEmail(fileId, jwtToken, email);
+    return await sendEmail(run.defaultKeyValueStoreId, fileId, jwtToken, email);
   } else {
     return new Response('OK', { status: 200 });
   }
@@ -95,17 +95,27 @@ export async function POST(request: Request) {
 // Callback from apify actor
 export async function PUT(request: Request) {
   console.log('api.invoice.PUT.start');
-  const { jwtToken, fileId, email } = await request.json();
+  const { jwtToken, fileId, email, apifyUrl } = await request.json();
 
   console.log('api.invoice.PUT.body.jwtToken', jwtToken);
   console.log('api.invoice.PUT.body.fileId', fileId);
   console.log('api.invoice.PUT.body.email', email);
 
-  return await sendEmail(fileId, jwtToken, email);
+  // https://api.apify.com/v2/key-value-stores/ZrG3gBYK67XllXLLh/records/aio7dz1umupdvxpe7waf3df4
+  console.log('api.invoice.PUT.body.apifyUrl', apifyUrl);
+
+  const kvStoreId = apifyUrl.split('/')[5];
+
+  return await sendEmail(kvStoreId, fileId, jwtToken, email);
 }
 
-async function sendEmail(fileId: string, jwtToken: string, email: string) {
-  const apifyKvStoreClient = await apify.keyValueStore(config.APIFY_KVSTORE_ID);
+async function sendEmail(
+  kvStoreId: string,
+  fileId: string,
+  jwtToken: string,
+  email: string,
+) {
+  const apifyKvStoreClient = await apify.keyValueStore(kvStoreId);
 
   console.log('api.invoice.POST.apify.pdf.start', fileId);
   const pdf = await apifyKvStoreClient.getRecord(fileId, {
