@@ -257,7 +257,7 @@ const InvoiceBuilder = observer(() => {
 
 const MainContent: React.FC = () => {
   return (
-    <div className="h-full w-full overflow-auto flex justify-center items-center bg-gray-100 pt-8 pb-8 print:pt-0 print:pb-0">
+    <div className="h-full w-full overflow-auto flex justify-center items-center bg-gray-100 pt-8 pb-8 print:pt-0 print:pb-0 print:overflow-hidden">
       <SidebarButton />
       <TopRightButtons />
       <Chef />
