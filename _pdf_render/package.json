@@ -1,0 +1,36 @@
+{
+  "name": "invoice-kitchen-pdf",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "This actor takes a url to a invoice kitchen invoice and returns a pdf of the invoice",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "apify": "^3.0.0",
+    "crawlee": "^3.0.0",
+    "playwright": "*",
+    "node-fetch": "^2.6.12"
+  },
+  "devDependencies": {
+    "@apify/eslint-config-ts": "^0.2.3",
+    "@apify/tsconfig": "^0.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
+    "eslint": "^8.36.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4",
+    "@types/node-fetch": "^2.6.4"
+  },
+  "scripts": {
+    "start": "npm run start:dev",
+    "start:prod": "node dist/main.js",
+    "start:dev": "ts-node-esm -T src/main.ts",
+    "build": "tsc",
+    "lint": "eslint ./src --ext .ts",
+    "lint:fix": "eslint ./src --ext .ts --fix",
+    "test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1"
+  },
+  "author": "It's not you it's me",
+  "license": "ISC"
+}
