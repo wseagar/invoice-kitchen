@@ -31,8 +31,6 @@ export const metadata: Metadata = {
   },
 };
 
-const IS_PRODUCTION = process.env.NODE_ENV === 'production';
-
 export default function RootLayout({
   children,
 }: {
@@ -40,21 +38,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {IS_PRODUCTION && (
-        <>
-          <Script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-KY92RHEC41"
-          ></Script>
-          <Script>
-            {`window.dataLayer = window.dataLayer || [];
+      <Script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-KY92RHEC41"
+      ></Script>
+      <Script>
+        {`window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
         gtag('config', 'G-KY92RHEC41');`}
-          </Script>
-        </>
-      )}
+      </Script>
 
       <body className={inter.className}>{children}</body>
     </html>
