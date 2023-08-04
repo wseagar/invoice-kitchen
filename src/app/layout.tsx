@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,6 +31,8 @@ export const metadata: Metadata = {
   },
 };
 
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
 export default function RootLayout({
   children,
 }: {
@@ -37,6 +40,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      {IS_PRODUCTION && (
+        <>
+          <Script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-KY92RHEC41"
+          ></Script>
+          <Script>
+            {`window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-KY92RHEC41');`}
+          </Script>
+        </>
+      )}
+
       <body className={inter.className}>{children}</body>
     </html>
   );
