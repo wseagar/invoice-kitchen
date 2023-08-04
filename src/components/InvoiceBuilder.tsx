@@ -18,12 +18,20 @@ const driverObj = driver({
   showProgress: true,
   steps: [
     {
-      element: '#business-name-input',
       popover: {
         title: 'Invoice Kitchen',
         description:
-          'Click on the page to start typing. You can edit the text just like in any other text editor.',
-        position: 'bottom',
+          'Click anywhere in the invoice to start typing (after this tutorial of course!). You can edit the text just like in any other text editor.',
+        position: 'left',
+      },
+    },
+    {
+      element: '#business-name-input',
+      popover: {
+        title: 'Business Name',
+        description:
+          'For example you can start by entering your business name here.',
+        position: 'right',
       },
     },
     {
@@ -99,6 +107,7 @@ interface TextAreaProps {
   labelClassName?: string;
   placeholder?: string;
   label?: string;
+  labelPlaceholder?: string;
   onLabelChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -110,6 +119,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   labelClassName,
   placeholder,
   label,
+  labelPlaceholder,
   onLabelChange,
   value,
   onChange,
@@ -123,6 +133,7 @@ const TextArea: React.FC<TextAreaProps> = ({
       {label && (
         <input
           value={label}
+          placeholder={labelPlaceholder}
           onChange={onLabelChange}
           className={labelClassName}
         ></input>
@@ -145,6 +156,7 @@ interface InputProps {
   labelClassName?: string;
   placeholder?: string;
   label?: string;
+  labelPlaceholder?: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onLabelChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -156,6 +168,7 @@ const Input: React.FC<InputProps> = ({
   labelClassName,
   placeholder,
   label,
+  labelPlaceholder,
   onLabelChange,
   value,
   onChange,
@@ -163,9 +176,10 @@ const Input: React.FC<InputProps> = ({
 }) => {
   return (
     <div className={className}>
-      {label && (
+      {label !== undefined && (
         <input
           value={label}
+          placeholder={labelPlaceholder}
           onChange={onLabelChange}
           className={labelClassName}
         ></input>
@@ -357,6 +371,7 @@ const Header: React.FC = () => {
             className="font-normal text-sm"
             labelClassName="font-semibold text-sm uppercase tracking-wider"
             label={headerField.label}
+            labelPlaceholder={headerField.labelPlaceholder}
             value={headerField.value}
             placeholder={headerField.placeholder}
             onChange={(e) => {
@@ -586,6 +601,7 @@ const AdditionalNotes: React.FC = () => {
     <div className="border-t border-gray-300">
       <TextArea
         label={state.notesLabel}
+        labelPlaceholder={'Notes'}
         onLabelChange={(e) => {
           setState('notesLabel', e.target.value);
         }}

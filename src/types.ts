@@ -2,6 +2,7 @@ export type HeaderField = {
   label: string;
   value: string;
   placeholder: string;
+  labelPlaceholder: string;
 };
 
 export type AppState = {

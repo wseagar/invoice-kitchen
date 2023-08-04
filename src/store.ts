@@ -6,7 +6,7 @@ import { makeAutoObservable } from 'mobx';
 import { AppState } from './types';
 import { SWIFTLY_ICON } from './lib/swiftlyIconBase64';
 
-const CURRENT_STATE_VERSION = '1';
+const CURRENT_STATE_VERSION = '2';
 
 function presetInvoice(): AppState {
   return {
@@ -26,11 +26,13 @@ function presetInvoice(): AppState {
     headerFields: [
       {
         label: 'INVOICE #',
+        labelPlaceholder: 'INVOICE #',
         value: 'INV-0001',
         placeholder: 'INV-0001',
       },
       {
         label: 'DATE',
+        labelPlaceholder: 'DATE',
         value: new Date().toLocaleDateString(),
         placeholder: '01/01/2021',
       },
@@ -82,11 +84,13 @@ function defaultInvoice(): AppState {
     headerFields: [
       {
         label: 'INVOICE #',
+        labelPlaceholder: 'INVOICE #',
         value: '',
         placeholder: 'INV-0001',
       },
       {
         label: 'DATE',
+        labelPlaceholder: 'DATE',
         value: new Date().toLocaleDateString(),
         placeholder: '01/01/2021',
       },
@@ -122,6 +126,22 @@ class AppStateStore {
     makeAutoObservable(this);
   }
 
+  enableTaxNumber = () => {
+    this.setState('headerFields', [
+      ...this.state.headerFields,
+      {
+        label: 'TAX NUMBER',
+        labelPlaceholder: 'TAX NUMBER',
+        value: '',
+        placeholder: '123456789',
+      },
+    ]);
+  };
+
+  disableTaxNumber = () => {
+    this.setState('headerFields', this.state.headerFields.slice(0, 2));
+  };
+
   formatAsCurrency = (value: number) => {
     return Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -148,9 +168,6 @@ class AppStateStore {
   };
 
   setState = <K extends keyof AppState>(key: K, value: AppState[K]): void => {
-    if (key === 'logo') {
-      console.log(value);
-    }
     this.state[key] = value;
     this.saveToLocalStorage();
   };
@@ -177,11 +194,13 @@ class AppStateStore {
     this.setState('headerFields', [
       {
         label: 'INVOICE #',
+        labelPlaceholder: 'INVOICE #',
         value: newInvoiceNumber,
         placeholder: 'INV-0001',
       },
       {
         label: 'DATE',
+        labelPlaceholder: 'DATE',
         value: new Date().toLocaleDateString(),
         placeholder: '01/01/2021',
       },
