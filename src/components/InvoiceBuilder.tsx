@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { Cross1Icon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { Sidebar } from './Sidebar';
 import { StoreContext, initStore, store, useAppStateStore } from '@/store';
@@ -76,12 +76,75 @@ export function cx(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
+// Updates the height of a <textarea> when the value changes.
+const useAutosizeTextArea = (
+  textAreaRef: HTMLTextAreaElement | null,
+  value: string,
+) => {
+  useEffect(() => {
+    if (textAreaRef) {
+      // We need to reset the height momentarily to get the correct scrollHeight for the textarea
+      textAreaRef.style.height = '0px';
+      const scrollHeight = textAreaRef.scrollHeight;
+
+      // We then set the height directly, outside of the render loop
+      // Trying to set this with state or a ref will product an incorrect value.
+      textAreaRef.style.height = scrollHeight + 'px';
+    }
+  }, [textAreaRef, value]);
+};
+
+interface TextAreaProps {
+  className?: string;
+  labelClassName?: string;
+  placeholder?: string;
+  label?: string;
+  onLabelChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  rest?: any;
+}
+
+const TextArea: React.FC<TextAreaProps> = ({
+  className,
+  labelClassName,
+  placeholder,
+  label,
+  onLabelChange,
+  value,
+  onChange,
+  ...rest
+}) => {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  useAutosizeTextArea(textAreaRef.current, value);
+
+  return (
+    <div className={className}>
+      {label && (
+        <input
+          value={label}
+          onChange={onLabelChange}
+          className={labelClassName}
+        ></input>
+      )}
+      <textarea
+        ref={textAreaRef}
+        className="w-full resize-none"
+        rows={4}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        {...rest}
+      />
+    </div>
+  );
+};
+
 interface InputProps {
   className?: string;
   labelClassName?: string;
   placeholder?: string;
   label?: string;
-  isTextArea?: boolean;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onLabelChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -94,7 +157,6 @@ const Input: React.FC<InputProps> = ({
   placeholder,
   label,
   onLabelChange,
-  isTextArea,
   value,
   onChange,
   ...rest
@@ -108,24 +170,13 @@ const Input: React.FC<InputProps> = ({
           className={labelClassName}
         ></input>
       )}
-      {isTextArea ? (
-        <textarea
-          className="w-full"
-          rows={4}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          {...rest}
-        />
-      ) : (
-        <input
-          className="w-full"
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          {...rest}
-        />
-      )}
+      <input
+        className="w-full"
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        {...rest}
+      />
     </div>
   );
 };
@@ -289,12 +340,11 @@ const Header: React.FC = () => {
             setState('businessName', e.target.value);
           }}
         />
-        <Input
+        <TextArea
           className="font-normal text-sm"
           placeholder={`(Your Address)
 (Your Phone)
 (Your Email)`}
-          isTextArea
           value={state.businessHeaderFreeText}
           onChange={(e) => {
             setState('businessHeaderFreeText', e.target.value);
@@ -340,11 +390,10 @@ const SubHeader: React.FC = () => {
             setState('invoiceSubheader', e.target.value);
           }}
         />
-        <Input
+        <TextArea
           className="font-normal text-sm"
           placeholder={`(Customer Name)
 (Customer Address)`}
-          isTextArea
           value={state.invoiceSubheaderFreeText}
           onChange={(e) => {
             setState('invoiceSubheaderFreeText', e.target.value);
@@ -536,7 +585,7 @@ const AdditionalNotes: React.FC = () => {
   const { state, setState } = useAppStateStore();
   return (
     <div className="border-t border-gray-300">
-      <Input
+      <TextArea
         label={state.notesLabel}
         onLabelChange={(e) => {
           setState('notesLabel', e.target.value);
@@ -548,7 +597,6 @@ const AdditionalNotes: React.FC = () => {
         className="font-normal text-sm mt-2"
         labelClassName="font-semibold text-sm uppercase tracking-wider"
         placeholder="Additional notes"
-        isTextArea
       />
     </div>
   );
