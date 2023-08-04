@@ -68,15 +68,44 @@ export async function POST(request: Request) {
     jwt: jwtToken,
     fileId: fileId,
   });
-  const run = await apify.actor(config.APIFY_PDF_RENDER_ACTOR).call({
-    jwt: jwtToken,
+
+  // Hack: To run on vercels 10 second timeout, we just call the actor and
+  // return a 200.
+
+  // The actor then calls back to us when its done. However on localhost we don't
+  // do the callback nonsense and just wait for the actor to finish.
+
+  const actorResultPromise = apify.actor(config.APIFY_PDF_RENDER_ACTOR).call({
+    jwtToken: jwtToken,
     fileId: fileId,
+    email: email,
+    callback: config.NODE_ENV === 'development' ? false : true,
   });
-  console.log('api.invoice.POST.apify.success', run.id, run.finishedAt);
 
-  const apifyDocumentStore = run.defaultKeyValueStoreId;
+  if (config.NODE_ENV === 'development') {
+    const run = await actorResultPromise;
 
-  const apifyKvStoreClient = await apify.keyValueStore(apifyDocumentStore);
+    console.log('api.invoice.POST.apify.success', run.id, run.finishedAt);
+    return await sendEmail(fileId, jwtToken, email);
+  } else {
+    return new Response('OK', { status: 200 });
+  }
+}
+
+// Callback from apify actor
+export async function PUT(request: Request) {
+  console.log('api.invoice.PUT.start');
+  const { jwtToken, fileId, email } = await request.json();
+
+  console.log('api.invoice.PUT.body.jwtToken', jwtToken);
+  console.log('api.invoice.PUT.body.fileId', fileId);
+  console.log('api.invoice.PUT.body.email', email);
+
+  return await sendEmail(fileId, jwtToken, email);
+}
+
+async function sendEmail(fileId: string, jwtToken: string, email: string) {
+  const apifyKvStoreClient = await apify.keyValueStore(config.APIFY_KVSTORE_ID);
 
   console.log('api.invoice.POST.apify.pdf.start', fileId);
   const pdf = await apifyKvStoreClient.getRecord(fileId, {
