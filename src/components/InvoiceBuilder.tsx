@@ -232,7 +232,7 @@ export default function InvoiceBuilderWrapper({
 }
 
 const InvoiceBuilder = observer(() => {
-  const { state, showTour } = useAppStateStore();
+  const { state, showTour, forceDesktop } = useAppStateStore();
   const router = useRouter();
   const searchParams = useSearchParams();
   const isMobile = useMediaQuery({ query: '(max-width: 760px)' });
@@ -247,7 +247,7 @@ const InvoiceBuilder = observer(() => {
     }
   }, []);
 
-  if (isMobile) {
+  if (isMobile && !forceDesktop) {
     return (
       <div className="flex flex-col m-4 gap-10 justify-center items-center">
         <pre className="hidden">{JSON.stringify(state, null, 2)}</pre>

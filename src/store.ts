@@ -107,11 +107,13 @@ function defaultInvoice(): AppState {
 class AppStateStore {
   state: AppState;
   showTour: boolean = true;
+  forceDesktop: boolean = false;
 
   constructor(serverState?: AppState) {
     if (serverState) {
       this.state = serverState;
       this.showTour = false;
+      this.forceDesktop = true;
     } else {
       const localState = this.loadFromLocalStorage();
       if (localState) {
