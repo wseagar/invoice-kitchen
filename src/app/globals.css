@@ -98,7 +98,7 @@
   }
   @page {
     margin: 0;
-    overflow: none;
+    overflow: hidden;
   }
   textarea {
     resize: none;
