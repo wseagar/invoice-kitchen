@@ -8,12 +8,11 @@ import { ApifyClient } from 'apify-client';
 import InvoiceEmail from '@/email/InvoiceEmail';
 import { config } from '@/lib/config';
 
-const resend = new Resend(config.RESEND_API_KEY);
-const apify = new ApifyClient({
-  token: config.APIFY_TOKEN,
-});
-
 export async function POST(request: Request) {
+  const apify = new ApifyClient({
+    token: config.APIFY_TOKEN,
+  });
+
   console.log('api.invoice.POST.start');
   const {
     email,
@@ -115,6 +114,11 @@ async function sendEmail(
   jwtToken: string,
   email: string,
 ) {
+  const resend = new Resend(config.RESEND_API_KEY);
+  const apify = new ApifyClient({
+    token: config.APIFY_TOKEN,
+  });
+
   const apifyKvStoreClient = await apify.keyValueStore(kvStoreId);
 
   console.log('api.invoice.POST.apify.pdf.start', fileId);
