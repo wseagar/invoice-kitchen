@@ -98,6 +98,7 @@
   }
   @page {
     margin: 0;
+    overflow: none;
   }
   textarea {
     resize: none;
