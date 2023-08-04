@@ -1,7 +1,11 @@
 'use client';
 
 import React, { ChangeEvent, useEffect, useRef } from 'react';
-import { Cross1Icon, HamburgerMenuIcon } from '@radix-ui/react-icons';
+import {
+  Cross1Icon,
+  HamburgerMenuIcon,
+  QuestionMarkCircledIcon,
+} from '@radix-ui/react-icons';
 import { Sidebar } from './Sidebar';
 import { StoreContext, initStore, store, useAppStateStore } from '@/store';
 import { observer } from 'mobx-react-lite';
@@ -257,6 +261,7 @@ const MainContent: React.FC = () => {
       <SidebarButton />
       <TopRightButtons />
       <Chef />
+      <HelpButton />
       <div
         id="invoice-page"
         className="a4 shadow-lg print:shadow-none m-8 text-black flex flex-col gap-8"
@@ -267,6 +272,19 @@ const MainContent: React.FC = () => {
         <InvoiceItemsTable />
         <AdditionalNotes />
       </div>
+    </div>
+  );
+};
+
+const HelpButton: React.FC = () => {
+  return (
+    <div id="help-button" className="absolute bottom-2 left-2 print:hidden">
+      <button
+        className="p-4 flex items-center gap-2 hover:text-purple-700 "
+        onClick={() => driverObj.drive()}
+      >
+        <QuestionMarkCircledIcon />
+      </button>
     </div>
   );
 };
