@@ -272,15 +272,14 @@ const SidebarButton: React.FC = () => {
 };
 
 const CHEFS_TIPS = [
-  'Ciao! Remember, always serve your invoices al dente - firm to the bite! Send them out as soon as you can.',
   'An invoice without itemised details is like spaghetti without tomato sauce - it lacks substance! Make sure to specify your charges.',
-  'Payment terms should be as clear as a bellini cocktail. It keeps any disputes at bay, capisce?',
-  'Your invoice should reflect your business, just like a perfect tiramisu reflects the skill of the chef. Use a stylish template!',
-  'Keep your invoicing as consistent as a well-made risotto. It helps your clients know what to expect, si?',
-  "No invoice should leave the kitchen without a check - it's like tasting the sauce before you serve it.",
+  'Payment terms should be as clear as a bellini cocktail. It keeps any disputes at bay.',
+  'Your invoice should reflect your business, just like a perfect tiramisu reflects the skill of the chef.',
+  'Keep your invoicing as consistent as a well-made risotto. It helps your clients know what to expect.',
+  "No invoice should leave the kitchen without double checking the details - it's like tasting the sauce before you serve it.",
   'Invoice numbers should be as unique as every shape of pasta! Keep them in sequence for easier tracking.',
   "Follow up on unpaid invoices, just like you'd follow up on a missing cannoli order! Don't let them forget.",
-  "No overcharging or undercharging, amico. It's like getting the salt right in your pasta water. Be transparent!",
+  "No overcharging or undercharging. It's like getting the salt right in your pasta water. Be transparent!",
   "Aging? It's good for Parmigiano-Reggiano, not invoices. Aim for them to be paid pronto!",
   'For your international clients, serve your invoices in different currencies, just like offering different types of pasta.',
   'Payment methods should be varied, like the ingredients in a caponata! The more options, the better for your clients.',
