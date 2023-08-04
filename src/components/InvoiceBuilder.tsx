@@ -3,6 +3,7 @@
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 import {
   Cross1Icon,
+  GitHubLogoIcon,
   HamburgerMenuIcon,
   QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
@@ -18,6 +19,7 @@ import { useMediaQuery } from 'react-responsive';
 // @ts-ignore
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
+import { GithubIcon } from 'lucide-react';
 
 const driverObj = driver({
   showProgress: true,
@@ -302,13 +304,22 @@ const MainContent: React.FC = () => {
 
 const HelpButton: React.FC = () => {
   return (
-    <div id="help-button" className="absolute bottom-2 left-2 print:hidden">
+    <div
+      id="help-button"
+      className="absolute flex bottom-2 left-2 print:hidden"
+    >
       <button
         className="p-4 flex items-center gap-2 hover:text-purple-700 "
         onClick={() => driverObj.drive()}
       >
         <QuestionMarkCircledIcon />
       </button>
+      <a
+        className="p-4 flex items-center gap-2 hover:text-purple-700 "
+        href="https://github.com/wseagar/invoice-kitchen"
+      >
+        <GitHubLogoIcon />
+      </a>
     </div>
   );
 };
