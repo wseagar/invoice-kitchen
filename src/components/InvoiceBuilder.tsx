@@ -14,6 +14,7 @@ import { HoverCardTrigger } from '@radix-ui/react-hover-card';
 import { TopRightButtons } from './TopRightButtons';
 import { AppState } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useMediaQuery } from 'react-responsive';
 // @ts-ignore
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
@@ -232,15 +233,38 @@ const InvoiceBuilder = observer(() => {
   const { state, showTour } = useAppStateStore();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const isMobile = useMediaQuery({ query: '(max-width: 760px)' });
+
   if (searchParams.get('token')) {
     router.push('/', { scroll: false });
   }
 
   useEffect(() => {
-    if (showTour) {
+    if (showTour && !isMobile) {
       driverObj.drive();
     }
   }, []);
+
+  if (isMobile) {
+    return (
+      <div className="flex flex-col m-4 gap-10 justify-center items-center">
+        <pre className="hidden">{JSON.stringify(state, null, 2)}</pre>
+        <img src="./chef.svg" className="w-40 h-40" />
+        <div className="flex flex-col justify-center items-center">
+          <div className="text-2xl font-semibold text-center">
+            Invoice Kitchen
+          </div>
+          <div className="text-sm text-center">
+            This app is not currently available on mobile.
+          </div>
+          <div className="text-sm text-center">
+            Please use a desktop browser.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Will: Don't remove the hidden div state here.
   // if this isn't used then state never updates in any other component.
   // I think technically every component that uses state should be wrapped in observer
