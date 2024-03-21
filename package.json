@@ -40,6 +40,7 @@
     "next": "13.4.12",
     "postcss": "8.4.27",
     "react": "18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
     "react-responsive": "^9.0.2",
     "resend": "^0.17.2",
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.2",
+    "@types/react-beautiful-dnd": "^13.1.8",
     "prettier": "^3.0.0"
   }
 }

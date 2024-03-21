@@ -6,6 +6,7 @@ import {
   GitHubLogoIcon,
   HamburgerMenuIcon,
   QuestionMarkCircledIcon,
+  DragHandleHorizontalIcon,
 } from '@radix-ui/react-icons';
 import { Sidebar } from './Sidebar';
 import { StoreContext, initStore, store, useAppStateStore } from '@/store';
@@ -19,7 +20,7 @@ import { useMediaQuery } from 'react-responsive';
 // @ts-ignore
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
-import { GithubIcon } from 'lucide-react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 const driverObj = driver({
   showProgress: true,
@@ -483,6 +484,16 @@ const InvoiceItemsTable: React.FC = () => {
   const setLineItems = (lineItems: typeof state.lineItems) =>
     setState('lineItems', lineItems);
 
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const newLineItems = Array.from(lineItems);
+    const [reorderedItem] = newLineItems.splice(result.source.index, 1);
+    newLineItems.splice(result.destination.index, 0, reorderedItem);
+
+    setLineItems(newLineItems);
+  };
+
   const subtotal = lineItems.reduce(
     (acc, lineItem) => acc + (lineItem.price || 0) * (lineItem.quantity || 0),
     0,
@@ -491,167 +502,199 @@ const InvoiceItemsTable: React.FC = () => {
   const tax = subtotal * (taxPercent || 0);
   const total = subtotal + tax;
   return (
-    <div>
-      <div className="border-y border-gray-300 grid grid-cols-8 py-2">
-        <span className="col-span-5 uppercase tracking-wider font-semibold text-sm">
-          Item
-        </span>
-        <span className="col-span-1 uppercase tracking-wider font-semibold text-sm">
-          Qty
-        </span>
-        <span className="col-span-1 uppercase tracking-wider font-semibold text-sm">
-          Price
-        </span>
-        <span className="col-span-1 uppercase tracking-wider font-semibold text-sm">
-          Amount
-        </span>
-      </div>
-      {lineItems.map((lineItem, index) => (
-        <div
-          key={index}
-          className="relative border-b border-gray-300 grid grid-cols-8 py-2 group"
-        >
-          <button
-            className="absolute left-0 transform -translate-x-full opacity-0 group-hover:opacity-100 flex w-8 h-8 items-center justify-center"
-            onClick={() => {
-              const nextLineItems = lineItems.filter((_, idx) => idx !== index);
-              setLineItems(nextLineItems);
-            }}
-          >
-            <Cross1Icon />
-          </button>
-          <div className="col-span-5">
-            <Input
-              className="font-normal text-sm"
-              placeholder="Item name"
-              value={lineItem.name}
-              onChange={(e) => {
-                const newLineItems = [...lineItems];
-                newLineItems[index].name = e.target.value;
-                setLineItems(newLineItems);
-              }}
-            />
-            <TextArea
-              className="font-light text-sm"
-              placeholder="Describe your item (optional)"
-              value={lineItem.description}
-              rows={1}
-              onChange={(e) => {
-                const newLineItems = [...lineItems];
-                newLineItems[index].description = e.target.value;
-                setLineItems(newLineItems);
-              }}
-            />
-          </div>
-          <div className="col-span-1 flex items-center">
-            <Input
-              className="font-normal text-sm"
-              placeholder="0"
-              type="number"
-              value={lineItem.quantity as any}
-              onChange={(e) => {
-                const newLineItems = [...lineItems];
-                if (e.target.value === '') {
-                  newLineItems[index].quantity = undefined;
-                  setLineItems(newLineItems);
-                  return;
-                }
-                newLineItems[index].quantity = Number(e.target.value);
-                setLineItems(newLineItems);
-              }}
-            />
-          </div>
-          <div className="col-span-1 flex items-center">
-            <Input
-              className="font-normal text-sm"
-              placeholder="0.00"
-              type="number"
-              value={lineItem.price as any}
-              onChange={(e) => {
-                const newLineItems = [...lineItems];
-                if (e.target.value === '') {
-                  newLineItems[index].price = undefined;
-                  setLineItems(newLineItems);
-                  return;
-                }
-                newLineItems[index].price = Number(e.target.value);
-                setLineItems(newLineItems);
-              }}
-            />
-          </div>
-          <div className="col-span-1 flex items-center">
-            <span className="font-normal text-sm">
-              {formatAsCurrency(
-                (lineItem.price || 0) * (lineItem.quantity || 0),
-              )}
-            </span>
-          </div>
-        </div>
-      ))}
-      <div className="grid grid-cols-8 mt-4">
-        <div className="col-span-5">
-          <button
-            id="add-item-button"
-            className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700"
-            onClick={() => {
-              setLineItems([
-                ...lineItems,
-                {
-                  name: '',
-                  description: '',
-                  quantity: 0,
-                  price: 0,
-                },
-              ]);
-            }}
-          >
-            <span>Add Item</span>
-            <span>+</span>
-          </button>
-        </div>
-        <div className="col-span-1">
-          <span className="font-semibold text-sm uppercase tracking-wider">
-            Subtotal
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <div>
+        <div className="border-y border-gray-300 grid grid-cols-8 py-2">
+          <span className="col-span-5 uppercase tracking-wider font-semibold text-sm">
+            Item
+          </span>
+          <span className="col-span-1 uppercase tracking-wider font-semibold text-sm">
+            Qty
+          </span>
+          <span className="col-span-1 uppercase tracking-wider font-semibold text-sm">
+            Price
+          </span>
+          <span className="col-span-1 uppercase tracking-wider font-semibold text-sm">
+            Amount
           </span>
         </div>
-        <div className="col-span-1" />
-        <div className="col-span-1">
-          <span className="font-semibold text-sm">
-            {formatAsCurrency(subtotal)}
-          </span>
-        </div>
-      </div>
-      {taxPercent !== null && (
+        <Droppable droppableId="invoice-items">
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {lineItems.map((lineItem, index) => (
+                <Draggable
+                  key={index}
+                  draggableId={`item-${index}`}
+                  index={index}
+                >
+                  {(provided2) => (
+                    <div
+                      ref={provided2.innerRef}
+                      {...provided2.draggableProps}
+                      key={index}
+                      className="relative border-b border-gray-300 grid grid-cols-8 py-2 group"
+                    >
+                      <div className="absolute left-0 transform -translate-x-full opacity-0 group-hover:opacity-100 flex items-center">
+                        <button
+                          className="flex w-8 h-8 items-center justify-center"
+                          onClick={() => {
+                            const nextLineItems = lineItems.filter(
+                              (_, idx) => idx !== index,
+                            );
+                            setLineItems(nextLineItems);
+                          }}
+                        >
+                          <Cross1Icon />
+                        </button>
+                        <div
+                          {...provided2.dragHandleProps}
+                          className="flex w-8 h-8 items-center justify-center"
+                        >
+                          <DragHandleHorizontalIcon />
+                        </div>
+                      </div>
+                      <div className="col-span-5">
+                        <Input
+                          className="font-normal text-sm"
+                          placeholder="Item name"
+                          value={lineItem.name}
+                          onChange={(e) => {
+                            const newLineItems = [...lineItems];
+                            newLineItems[index].name = e.target.value;
+                            setLineItems(newLineItems);
+                          }}
+                        />
+                        <TextArea
+                          className="font-light text-sm"
+                          placeholder="Describe your item (optional)"
+                          value={lineItem.description}
+                          rows={1}
+                          onChange={(e) => {
+                            const newLineItems = [...lineItems];
+                            newLineItems[index].description = e.target.value;
+                            setLineItems(newLineItems);
+                          }}
+                        />
+                      </div>
+                      <div className="col-span-1 flex items-center">
+                        <Input
+                          className="font-normal text-sm"
+                          placeholder="0"
+                          type="number"
+                          value={lineItem.quantity as any}
+                          onChange={(e) => {
+                            const newLineItems = [...lineItems];
+                            if (e.target.value === '') {
+                              newLineItems[index].quantity = undefined;
+                              setLineItems(newLineItems);
+                              return;
+                            }
+                            newLineItems[index].quantity = Number(
+                              e.target.value,
+                            );
+                            setLineItems(newLineItems);
+                          }}
+                        />
+                      </div>
+                      <div className="col-span-1 flex items-center">
+                        <Input
+                          className="font-normal text-sm"
+                          placeholder="0.00"
+                          type="number"
+                          value={lineItem.price as any}
+                          onChange={(e) => {
+                            const newLineItems = [...lineItems];
+                            if (e.target.value === '') {
+                              newLineItems[index].price = undefined;
+                              setLineItems(newLineItems);
+                              return;
+                            }
+                            newLineItems[index].price = Number(e.target.value);
+                            setLineItems(newLineItems);
+                          }}
+                        />
+                      </div>
+                      <div className="col-span-1 flex items-center">
+                        <span className="font-normal text-sm">
+                          {formatAsCurrency(
+                            (lineItem.price || 0) * (lineItem.quantity || 0),
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+
         <div className="grid grid-cols-8 mt-4">
-          <div className="col-span-5"></div>
+          <div className="col-span-5">
+            <button
+              id="add-item-button"
+              className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700"
+              onClick={() => {
+                setLineItems([
+                  ...lineItems,
+                  {
+                    name: '',
+                    description: '',
+                    quantity: 0,
+                    price: 0,
+                  },
+                ]);
+              }}
+            >
+              <span>Add Item</span>
+              <span>+</span>
+            </button>
+          </div>
           <div className="col-span-1">
             <span className="font-semibold text-sm uppercase tracking-wider">
-              Tax
+              Subtotal
             </span>
           </div>
           <div className="col-span-1" />
           <div className="col-span-1">
             <span className="font-semibold text-sm">
-              {formatAsCurrency(tax)}
+              {formatAsCurrency(subtotal)}
             </span>
           </div>
         </div>
-      )}
-      <div className="grid grid-cols-8 mt-4">
-        <div className="col-span-5"></div>
-        <div className="col-span-1">
-          <span className="font-semibold text-sm uppercase tracking-wider">
-            Total
-          </span>
-        </div>
-        <div className="col-span-1" />
-        <div className="col-span-1">
-          <span className="font-semibold text-sm">
-            {formatAsCurrency(total)}
-          </span>
+        {taxPercent !== null && (
+          <div className="grid grid-cols-8 mt-4">
+            <div className="col-span-5"></div>
+            <div className="col-span-1">
+              <span className="font-semibold text-sm uppercase tracking-wider">
+                Tax
+              </span>
+            </div>
+            <div className="col-span-1" />
+            <div className="col-span-1">
+              <span className="font-semibold text-sm">
+                {formatAsCurrency(tax)}
+              </span>
+            </div>
+          </div>
+        )}
+        <div className="grid grid-cols-8 mt-4">
+          <div className="col-span-5"></div>
+          <div className="col-span-1">
+            <span className="font-semibold text-sm uppercase tracking-wider">
+              Total
+            </span>
+          </div>
+          <div className="col-span-1" />
+          <div className="col-span-1">
+            <span className="font-semibold text-sm">
+              {formatAsCurrency(total)}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 
