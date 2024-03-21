@@ -45,13 +45,15 @@ export async function POST(request: Request) {
   console.log('api.invoice.POST.email.start');
   console.log(config.PDF_API_URL);
   console.log(config.PDF_API_KEY);
-  fetch(config.PDF_API_URL, {
+  const response = await fetch(config.PDF_API_URL, {
     method: 'POST',
     body: JSON.stringify({ email, invoice, token }),
     headers: {
       'x-api-key': config.PDF_API_KEY,
     },
   });
+  console.log('api.invoice.POST.email.end');
+  console.log('api.invoice.POST.email.response', response.status);
 
   return new Response('OK', { status: 200 });
 }
