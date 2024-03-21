@@ -20,26 +20,26 @@ export async function POST(request: Request) {
   console.log('api.invoice.POST.body.token', token);
 
   // site verify
-  if (config.NODE_ENV !== 'development') {
-    console.log('api.invoice.POST.siteverify.start');
+  // if (config.NODE_ENV !== 'development') {
+  //   console.log('api.invoice.POST.siteverify.start');
 
-    const form = new URLSearchParams();
-    form.append('secret', config.CLOUDFLARE_TURNSTILE_SECRET_KEY);
-    form.append('response', token);
-    form.append('remoteip', request.headers.get('x-forwarded-for') as string);
+  //   const form = new URLSearchParams();
+  //   form.append('secret', config.CLOUDFLARE_TURNSTILE_SECRET_KEY);
+  //   form.append('response', token);
+  //   form.append('remoteip', request.headers.get('x-forwarded-for') as string);
 
-    const result = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      { method: 'POST', body: form },
-    );
-    const json = await result.json();
+  //   const result = await fetch(
+  //     'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+  //     { method: 'POST', body: form },
+  //   );
+  //   const json = await result.json();
 
-    if (!json.success) {
-      console.log('api.invoice.POST.siteverify.fail');
-      return new Response('Invalid captcha', { status: 400 });
-    }
-    console.log('api.invoice.POST.siteverify.success');
-  }
+  //   if (!json.success) {
+  //     console.log('api.invoice.POST.siteverify.fail');
+  //     return new Response('Invalid captcha', { status: 400 });
+  //   }
+  //   console.log('api.invoice.POST.siteverify.success');
+  // }
 
   // send request to email and render to cloudflare, don't wait for a response
   fetch(config.PDF_API_URL, {
