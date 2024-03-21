@@ -17,7 +17,7 @@ export interface Env {
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		const allowedCorsOrigins = ['https://invoice.kitchen', 'https://invoicekitchen.com', 'http://localhost:3000'];
+		const allowedCorsOrigins = ['https://www.invoice.kitchen', 'http://localhost:3000'];
 		const requestOrigin = request.headers.get('Origin');
 
 		if (!requestOrigin || !allowedCorsOrigins.includes(requestOrigin)) {
