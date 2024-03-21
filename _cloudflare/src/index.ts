@@ -17,14 +17,31 @@ export interface Env {
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+		const allowedCorsOrigins = ['https://invoice.kitchen', 'https://invoicekitchen.com', 'http://localhost:3000'];
+		const requestOrigin = request.headers.get('Origin');
+
+		if (!requestOrigin || !allowedCorsOrigins.includes(requestOrigin)) {
+			return new Response('Unauthorized', { status: 401 });
+		}
+
+		if (request.method === 'OPTIONS') {
+			return new Response(null, {
+				headers: {
+					'Access-Control-Allow-Origin': requestOrigin,
+					'Access-Control-Allow-Methods': 'POST,OPTIONS',
+					'Access-Control-Max-Age': '86400',
+				},
+			});
+		}
+
 		if (request.method !== 'POST') {
 			return new Response('Please use a POST request');
 		}
 
-		const apiKey = request.headers.get('x-api-key');
-		if (apiKey !== env.PDF_API_KEY) {
-			return new Response('Unauthorized', { status: 401 });
-		}
+		// const apiKey = request.headers.get('x-api-key');
+		// if (apiKey !== env.PDF_API_KEY) {
+		// 	return new Response('Unauthorized', { status: 401 });
+		// }
 
 		const redis = Redis.fromEnv({
 			UPSTASH_REDIS_REST_TOKEN: env.KV_REST_API_TOKEN,
@@ -67,7 +84,7 @@ export default {
 				],
 			});
 
-			return new Response('OK', { status: 200 });
+			return new Response('OK', { status: 200, headers: { 'Access-Control-Allow-Origin': requestOrigin } });
 		} else {
 			return new Response('Please add an ?url=https://example.com/ parameter');
 		}

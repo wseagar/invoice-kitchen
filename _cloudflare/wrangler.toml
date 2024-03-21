@@ -3,6 +3,8 @@ main = "src/index.ts"
 compatibility_date = "2024-03-20"
 compatibility_flags = ["nodejs_compat"]
 browser = { binding = "BROWSER" }
+keep_vars = true
+
 
 # Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
 # Note: Use secrets to store sensitive data.

@@ -223,7 +223,7 @@ class AppStateStore {
   sendInvoice = async (email: string, token: string) => {
     const invoice = this.state;
 
-    const response = await fetch('/api/invoice', {
+    const response = await fetch('https://pdf.invoice-kitchen.workers.dev', {
       method: 'POST',
       body: JSON.stringify({ email, invoice, token }),
     });

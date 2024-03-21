@@ -253,14 +253,14 @@ const EmailDialog = ({
               }}
             />
           </div>
-          <Turnstile
+          {/* <Turnstile
             siteKey="0x4AAAAAAAIMHH3XH4HezMXA"
             onSuccess={setToken}
             options={{
               theme: 'light',
               appearance: 'interaction-only',
             }}
-          />
+          /> */}
         </div>
         <DialogFooter>
           <Button
