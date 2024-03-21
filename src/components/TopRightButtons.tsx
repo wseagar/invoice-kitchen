@@ -195,6 +195,26 @@ const PresetButton = () => {
     </>
   );
 };
+
+const useCountdown = (initialSeconds: number, startCountdown: boolean) => {
+  const [seconds, setSeconds] = React.useState(initialSeconds);
+
+  React.useEffect(() => {
+    if (startCountdown && seconds > 0) {
+      const timer = setTimeout(() => {
+        setSeconds(seconds - 1);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+    if (!startCountdown) {
+      setSeconds(initialSeconds);
+    }
+  }, [seconds, startCountdown, initialSeconds]);
+
+  return seconds;
+};
+
 const EmailDialog = ({
   open,
   setOpen,
@@ -214,6 +234,9 @@ const EmailDialog = ({
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
   const [sent, setSent] = React.useState(false);
+
+  const initialCountdownSeconds = 13;
+  const countdownSeconds = useCountdown(initialCountdownSeconds, loading);
 
   const send = async () => {
     setLoading(true);
@@ -239,21 +262,20 @@ const EmailDialog = ({
             <DialogDescription>{additionalDescription}</DialogDescription>
           )}
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="email" className="text-right">
-              Email
-            </Label>
+        <div className="grid gap-4 py-2">
+          <div className="grid gap-4">
+            <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               value={email}
-              className="col-span-3"
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
+              placeholder="chef@invoicekitchen.com"
             />
           </div>
-          {/* <Turnstile
+        </div>
+        {/* <Turnstile
             siteKey="0x4AAAAAAAIMHH3XH4HezMXA"
             onSuccess={setToken}
             options={{
@@ -261,7 +283,7 @@ const EmailDialog = ({
               appearance: 'interaction-only',
             }}
           /> */}
-        </div>
+
         <DialogFooter>
           <Button
             type="submit"
@@ -271,7 +293,7 @@ const EmailDialog = ({
             {loading && (
               <>
                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                Sending...
+                Sending... (ETA ~{countdownSeconds} seconds)
               </>
             )}
             {!loading && 'Send'}
@@ -324,8 +346,8 @@ const EmailMePdfDialog = ({
     open={open}
     setOpen={setOpen}
     title="PDF"
-    description="The Invoice Chef needs a moment to finish cooking."
-    additionalDescription="Enter your email below and we'll email you a copy of your invoice momentarily."
+    description="Enter your email below and we'll email you a copy of your invoice momentarily."
+    additionalDescription=""
   />
 );
 
