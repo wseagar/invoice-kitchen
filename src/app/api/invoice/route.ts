@@ -42,6 +42,9 @@ export async function POST(request: Request) {
   // }
 
   // send request to email and render to cloudflare, don't wait for a response
+  console.log('api.invoice.POST.email.start');
+  console.log(config.PDF_API_URL);
+  console.log(config.PDF_API_KEY);
   fetch(config.PDF_API_URL, {
     method: 'POST',
     body: JSON.stringify({ email, invoice, token }),
