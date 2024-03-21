@@ -117,6 +117,7 @@ interface TextAreaProps {
   labelPlaceholder?: string;
   onLabelChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
+  rows?: number;
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   rest?: any;
 }
@@ -130,6 +131,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   onLabelChange,
   value,
   onChange,
+  rows = 4,
   ...rest
 }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -148,7 +150,7 @@ const TextArea: React.FC<TextAreaProps> = ({
       <textarea
         ref={textAreaRef}
         className="w-full resize-none"
-        rows={4}
+        rows={rows}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
@@ -235,7 +237,11 @@ const InvoiceBuilder = observer(() => {
   const { state, showTour, forceDesktop } = useAppStateStore();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isMobile = useMediaQuery({ query: '(max-width: 760px)' });
+  const isRendering = !!searchParams.get('render');
+  let isMobile = useMediaQuery({ query: '(max-width: 760px)' });
+  if (isRendering) {
+    isMobile = false;
+  }
 
   if (searchParams.get('token')) {
     router.push('/', { scroll: false });
@@ -525,10 +531,11 @@ const InvoiceItemsTable: React.FC = () => {
                 setLineItems(newLineItems);
               }}
             />
-            <Input
+            <TextArea
               className="font-light text-sm"
               placeholder="Describe your item (optional)"
               value={lineItem.description}
+              rows={1}
               onChange={(e) => {
                 const newLineItems = [...lineItems];
                 newLineItems[index].description = e.target.value;
