@@ -367,10 +367,12 @@ const Chef: React.FC = () => {
   const tip = CHEFS_TIPS[tipIdx];
 
   return (
-    <div id="chef" className="absolute bottom-2 right-2">
+    <div id="chef" className="absolute bottom-2 right-2 print:hidden">
       <HoverCard>
         <HoverCardTrigger>
-          <img src="./chef.svg" className="w-40 h-40" />
+          <div className="p-4">
+            <img src="./chef.svg" className="w-8 h-8" />
+          </div>
         </HoverCardTrigger>
         <HoverCardContent>
           <div className="text-sm">{tip}</div>
