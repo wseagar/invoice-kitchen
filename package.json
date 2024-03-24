@@ -42,6 +42,7 @@
     "react": "18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
+    "react-number-format": "^5.3.4",
     "react-responsive": "^9.0.2",
     "resend": "^0.17.2",
     "tailwind-merge": "^1.14.0",

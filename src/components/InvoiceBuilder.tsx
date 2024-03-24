@@ -21,6 +21,7 @@ import { useMediaQuery } from 'react-responsive';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { NumericFormat } from 'react-number-format';
 
 const driverObj = driver({
   showProgress: true,
@@ -686,22 +687,42 @@ const InvoiceItemsTable: React.FC = () => {
             </span>
           </div>
         </div>
-        {taxPercent !== null && (
-          <div className="grid grid-cols-8 mt-4">
-            <div className="col-span-5"></div>
-            <div className="col-span-1">
-              <span className="font-semibold text-sm uppercase tracking-wider">
-                Tax
-              </span>
-            </div>
-            <div className="col-span-1" />
-            <div className="col-span-1">
-              <span className="font-semibold text-sm">
-                {formatAsCurrency(tax)}
-              </span>
-            </div>
+        <div className="grid grid-cols-8 mt-4">
+          <div className="col-span-5"></div>
+          <div className="col-span-2 flex items-center">
+            <span className="font-semibold text-sm uppercase tracking-wider mr-2">
+              Tax
+            </span>
+            <span className="font-semibold  text-sm uppercase tracking-wider">
+              (
+            </span>
+            <NumericFormat
+              className="font-normal text-sm w-12"
+              value={(taxPercent || 0) * 100}
+              onValueChange={(value) => {
+                const taxRate = (value.floatValue || 0) / 100;
+                console.log('taxRate', taxRate);
+                setState('taxRate', taxRate);
+              }}
+              suffix="%"
+              allowLeadingZeros={false}
+              allowNegative={false}
+              decimalScale={2}
+              fixedDecimalScale
+              customInput={Input}
+            />
+            <span className="font-semibold  text-sm uppercase tracking-wider">
+              )
+            </span>
           </div>
-        )}
+          {/* <div className="col-span-1" /> */}
+          <div className="col-span-1">
+            <span className="font-semibold text-sm">
+              {formatAsCurrency(tax)}
+            </span>
+          </div>
+        </div>
+
         <div className="grid grid-cols-8 mt-4">
           <div className="col-span-5"></div>
           <div className="col-span-1">
