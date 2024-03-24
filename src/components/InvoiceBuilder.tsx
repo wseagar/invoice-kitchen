@@ -395,14 +395,35 @@ const Chef: React.FC = () => {
 const Header: React.FC = () => {
   const { state, setState } = useAppStateStore();
   return (
-    <div className="grid grid-cols-5">
+    <div className="grid grid-cols-5 gap-4">
       {state.logo && (
-        <div className="col-span-1">
+        // <div className="col-span-1">
+        //   <img
+        //     src={state.logo}
+        //     alt="logo"
+        //     className="w-20 h-20 object-contain"
+        //   />
+        // </div>
+        <div
+          className="col-span-1 relative overflow-hidden"
+          style={{
+            maxWidth: '100px',
+            maxHeight: '100px',
+          }}
+        >
           <img
             src={state.logo}
             alt="logo"
-            className="w-20 h-20 object-contain"
+            className="w-full h-full object-contain"
           />
+          <div
+            className="absolute left-0 top-0 w-full h-full opacity-0 hover:opacity-100 bg-gray-700 bg-opacity-70 cursor-pointer"
+            onClick={() => setState('logo', null)}
+          >
+            <div className="flex justify-center items-center h-full">
+              <div className="text-white text-lg select-none">Remove</div>
+            </div>
+          </div>
         </div>
       )}
       <div className={state.logo ? 'col-span-3' : 'col-span-4'}>
