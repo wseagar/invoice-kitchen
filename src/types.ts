@@ -15,6 +15,7 @@ export type AppState = {
     value: string;
   };
   taxRate: number | null;
+  taxEnabled: boolean;
   logo: string | null;
   businessName: string;
   businessHeaderFreeText: string;

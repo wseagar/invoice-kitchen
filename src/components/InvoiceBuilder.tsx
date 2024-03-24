@@ -523,7 +523,7 @@ const InvoiceItemsTable: React.FC = () => {
     0,
   );
   const taxPercent = state.taxRate;
-  const tax = subtotal * (taxPercent || 0);
+  const tax = state.taxEnabled ? subtotal * (taxPercent || 0) : 0;
   const total = subtotal + tax;
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -687,41 +687,43 @@ const InvoiceItemsTable: React.FC = () => {
             </span>
           </div>
         </div>
-        <div className="grid grid-cols-8 mt-4">
-          <div className="col-span-5"></div>
-          <div className="col-span-2 flex items-center">
-            <span className="font-semibold text-sm uppercase tracking-wider mr-2">
-              Tax
-            </span>
-            <span className="font-semibold  text-sm uppercase tracking-wider">
-              (
-            </span>
-            <NumericFormat
-              className="font-normal text-sm w-12"
-              value={(taxPercent || 0) * 100}
-              onValueChange={(value) => {
-                const taxRate = (value.floatValue || 0) / 100;
-                console.log('taxRate', taxRate);
-                setState('taxRate', taxRate);
-              }}
-              suffix="%"
-              allowLeadingZeros={false}
-              allowNegative={false}
-              decimalScale={2}
-              fixedDecimalScale
-              customInput={Input}
-            />
-            <span className="font-semibold  text-sm uppercase tracking-wider">
-              )
-            </span>
+        {state.taxEnabled && (
+          <div className="grid grid-cols-8 mt-4">
+            <div className="col-span-5"></div>
+            <div className="col-span-2 flex items-center">
+              <span className="font-semibold text-sm uppercase tracking-wider mr-2">
+                Tax
+              </span>
+              <span className="font-semibold  text-sm uppercase tracking-wider">
+                (
+              </span>
+              <NumericFormat
+                className="font-normal text-sm w-12"
+                value={(taxPercent || 0) * 100}
+                onValueChange={(value) => {
+                  const taxRate = (value.floatValue || 0) / 100;
+                  console.log('taxRate', taxRate);
+                  setState('taxRate', taxRate);
+                }}
+                suffix="%"
+                allowLeadingZeros={false}
+                allowNegative={false}
+                decimalScale={2}
+                fixedDecimalScale
+                customInput={Input}
+              />
+              <span className="font-semibold  text-sm uppercase tracking-wider">
+                )
+              </span>
+            </div>
+            {/* <div className="col-span-1" /> */}
+            <div className="col-span-1">
+              <span className="font-semibold text-sm">
+                {formatAsCurrency(tax)}
+              </span>
+            </div>
           </div>
-          {/* <div className="col-span-1" /> */}
-          <div className="col-span-1">
-            <span className="font-semibold text-sm">
-              {formatAsCurrency(tax)}
-            </span>
-          </div>
-        </div>
+        )}
 
         <div className="grid grid-cols-8 mt-4">
           <div className="col-span-5"></div>

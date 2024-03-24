@@ -43,9 +43,10 @@ export function TaxOption() {
             <div className="flex items-center gap-2">
               <Checkbox
                 id="enableTax"
-                checked={state.taxRate !== null}
+                checked={state.taxEnabled}
                 onCheckedChange={(checkedState) => {
-                  setState('taxRate', checkedState ? 0.1 : null);
+                  const taxEnabled = !!checkedState;
+                  setState('taxEnabled', taxEnabled);
                 }}
               />{' '}
               <Label htmlFor="enableTax">Enable Tax</Label>
@@ -60,29 +61,6 @@ export function TaxOption() {
           </HoverCardContent>
         </HoverCard>
       </div>
-      {state.taxRate !== null && (
-        <div className="grid gap-2">
-          <HoverCard openDelay={200}>
-            <HoverCardTrigger asChild>
-              <Label htmlFor="taxRate">Tax Rate</Label>
-            </HoverCardTrigger>
-            <HoverCardContent
-              align="start"
-              className="w-[260px] text-sm"
-              side="left"
-            >
-              The tax rate to use for the invoice.
-            </HoverCardContent>
-          </HoverCard>
-          <Input
-            type="number"
-            placeholder="0.1"
-            id="taxRate"
-            value={state.taxRate}
-            onChange={(e) => setState('taxRate', e.target.valueAsNumber)}
-          />
-        </div>
-      )}
     </div>
   );
 }

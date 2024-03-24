@@ -6,7 +6,7 @@ import { makeAutoObservable } from 'mobx';
 import { AppState } from './types';
 import { SWIFTLY_ICON } from './lib/swiftlyIconBase64';
 
-const CURRENT_STATE_VERSION = '2';
+const CURRENT_STATE_VERSION = '3';
 
 function presetInvoice(): AppState {
   return {
@@ -19,6 +19,7 @@ function presetInvoice(): AppState {
       value: 'USD',
     },
     taxRate: 0.1,
+    taxEnabled: true,
     logo: SWIFTLY_ICON,
     businessName: 'Swiftly',
     businessHeaderFreeText:
@@ -77,6 +78,7 @@ function defaultInvoice(): AppState {
       value: 'USD',
     },
     taxRate: null,
+    taxEnabled: true,
     logo: null,
 
     businessName: '',
@@ -111,13 +113,13 @@ class AppStateStore {
 
   constructor(serverState?: AppState) {
     if (serverState) {
-      this.state = serverState;
+      this.state = this.migrateAndValidateState(serverState);
       this.showTour = false;
       this.forceDesktop = true;
     } else {
       const localState = this.loadFromLocalStorage();
       if (localState) {
-        this.state = localState;
+        this.state = this.migrateAndValidateState(localState);
         this.showTour = false;
       } else {
         this.state = presetInvoice();
@@ -155,6 +157,20 @@ class AppStateStore {
     window.localStorage.setItem('invoice-chef', JSON.stringify(this.state));
   };
 
+  migrateAndValidateState = (parsedState: any) => {
+    if (parsedState.version === CURRENT_STATE_VERSION) {
+      return parsedState;
+    }
+    if (Number(parsedState.version) < 3) {
+      return {
+        ...parsedState,
+        taxEnabled: parsedState.taxRate !== null ? true : false,
+        version: CURRENT_STATE_VERSION,
+      };
+    }
+    return;
+  };
+
   loadFromLocalStorage = () => {
     if (typeof window === 'undefined') {
       return;
@@ -162,9 +178,7 @@ class AppStateStore {
     const savedState = window.localStorage.getItem('invoice-chef');
     if (savedState) {
       const parsedState = JSON.parse(savedState);
-      if (parsedState.version === CURRENT_STATE_VERSION) {
-        return parsedState;
-      }
+      return parsedState;
     }
     return;
   };
